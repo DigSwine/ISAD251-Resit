@@ -1,74 +1,51 @@
 <?php
-include 'header.php';
-include_once '../API/API_functions.php';
+include_once 'Extras/Stylesheet.php';
+include_once 'Extras/Webfunctions.php';
 ?>
 
 <html>
-
 <!-- Header with image -->
-<header class="bgimg w3-display-container w3-grayscale-min" id="home">
-    <div class="w3-display-middle w3-center">
-        <span class="w3-text-white" style="font-size:70px">BattleForce<br>Sleep</span>
-    </div>
-</header>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
-      integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+<div class="header">
+    <h1>Home Page</h1>
+    <button onclick="Loginpage()" style="position: absolute; right: 50px; top: 30px">Log in</button>
+    <button onclick="newuser()" style="position: absolute; right: 50px; top: 65px">New User</button>
+</div>
 
-<!-- Add a background color and large text to the whole page -->
-<div class="w3-sand w3-grayscale w3-large">
-
-    <center>
-
-        <!-- About Container -->
-        <div class="w3-container" id="about">
-            <div class="w3-content" style="max-width:100%">
-                <h5 class="w3-center w3-padding-64"><span class="w3-tag w3-wide">PRODUCT VISION</span></h5>
-                <div class="w3-panel w3-leftbar w3-light-grey">
-                    <p>“Our product is for students who want to improve their sleeping routines and their overall well-being.
-                        Our health and fitness application monitors our customer’s daily sleeping habits.
-                        The recorded data will be displayed in the form of graphs and charts in order to make it easier for consumers to understand.
-                        Our customers will have access to all features without any additional costs.”</p>
+<!-- Add a background color to the about section -->
+        <div id="about"; style="padding-top: 20px; max-width: 100%;">
+            <!-- About Container -->
+            <div class="w3-content" style="padding-left: 50px;" >
+                <h5>About this web page and its service</h5>
+                <div>
+                    <p>This website that has been made ensures that all uses can find the website easy to navigate.<br>
+                        This has been achieved by making everything as user-friendly and some disability adaptations have been
+                        taken into consideration.<br><br>
+                        This website aims to aid a family in management of their appointments, and children's deadlines.<br>
+                        With the use of a log in for each member the website can ensure that users do not have their details mixed up.
+                    </p>
                     <br>
                 </div>
             </div>
 
-            <!-- Reasons to download app Container -->
-            <div class="w3-container" id="about">
-                <div class="w3-content" style="max-width:100%">
-                    <h5 class="w3-center w3-padding-64"><span class="w3-tag w3-wide">REASONS YOU SHOULD GET OUR APP</span></h5>
-                    <div class="w3-panel w3-leftbar w3-light-grey">
-
+            <!-- Banner positioning and headers-->
+            <div id="banners">
+                <div style="padding-left: 50px">
+                    <h5>What you can expect from this website</h5>
+                    <!-- Banners -->
+                    <div style="padding-left: 10px">
                         <div class="row" >
-
-                            <div class="column" >
-                                <h6>Reason 1</h6>
-                                <p>This app and website that we have made has been made with the user in mind.
-                                    By making everything as user-friendly and even some aspects of disability have been
-                                    taken into consideration, by selecting a
-                                    colour scheme which works with colourblindness. </p>
-
+                            <div class="views" >
+                                <h6>Parent View</h6>
+                                <p> Parent Banner </p>
                             </div>
-                            <div class="column" >
-                                <h6>Reason 2</h6>
-                                <p>We have tried a few sleeping applications ourselves, and we all found one thing in
-                                    common... they all required some kind of payment. As student's this is not always possible, as students dont have much money.
-                                    So we decided to make our application free</p>
+                            <div class="views" >
+                                <h6>Child View</h6>
+                                <p> Child Banner </p>
                             </div>
-
                         </div>
-
                         <br>
                     </div>
                 </div>
-                <style>
-
-                    /* Create two equal columns that floats next to each other */
-                    .column {
-                        float: left;
-                        width: 50%;
-                        padding: 10px;
-                    }
-                </style>
             </div>
             <br>
         </div>
