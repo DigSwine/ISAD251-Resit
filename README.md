@@ -5,7 +5,7 @@ Github Link: https://github.com/DigSwine/ISAD251-Resit
 
 Webpage UML:
 
-Server Link:
+Server Link: \\CENT-5-534.uopnet.plymouth.ac.uk\ISAD251\MWilson-Slider
 
 Youtube Link:
 
