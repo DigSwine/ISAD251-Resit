@@ -19,4 +19,15 @@
             '_blank');
         close();
     }
+
+    function Logout() {
+        window.open(
+            'HomePage.php',
+            '_blank');
+        close();
+    }
+
+    function Login(){
+        alert("your being logged in");
+    }
 </script>

@@ -1,6 +1,7 @@
 <?php
 include_once 'Extras/Stylesheet.php';
 include_once 'Extras/Webfunctions.php';
+include_once '../API/API_Login.php';
 ?>
 
 <html>
@@ -16,10 +17,20 @@ include_once 'Extras/Webfunctions.php';
     <div class="w3-content" style="padding-left: 50px;" >
         <form>
             <p>Username: <input name="user"; placeholder="Username"; type="text"></p>
-            <p>Password: <input name="pass"; placeholder="Password"; type="password"></p>
-            <button onclick="Login()" style="position: absolute; left: 150px">Login</button>
+            <p>Password: <input name="pass"; placeholder="Password"; type="text"></p>
+            <button onclick="compare()" style="position: absolute; left: 150px">Login</button>
         </form>
     </div>
 </div>
 </body>
 </html>
+
+<script>
+    function compare() {
+        <?php
+        sendlogin();
+        ?>
+    }
+
+
+</script>
