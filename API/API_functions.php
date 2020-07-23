@@ -20,18 +20,69 @@ function getConnection()
     return $dbConnection;
 }
 
-function Compareusers($User, $Pass){
-    $statement = getConnection()->prepare("SELECT Member_Username, Member_Password FROM tbl_members  WHERE Member_Username = ' . $User . ' AND Member_Password = ' . $Pass .'");
+//Getters
+function getAll($User, $Pass){
+    $_SESSION["role"] = getRole($User, $Pass);
+    $_SESSION["getName"] = getName($User, $Pass);
+    $_SESSION["member"] = getMember($User, $Pass);
+    $_SESSION["family"] = getFamily($User, $Pass);
+}
+function getRole($User, $Pass){
+    $statement = getConnection()->prepare("SELECT Member_Role FROM tbl_members  WHERE Member_Username = '". $User . "' AND Member_Password = '" . $Pass . "'");
     $statement->execute();
     $resultSet = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-    return $resultSet;
+    return tosend($resultSet);
+}
+function getName($User, $Pass){
+    $statement = getConnection()->prepare("SELECT Member_Name FROM tbl_members  WHERE Member_Username = '". $User . "' AND Member_Password = '" . $Pass . "'");
+    $statement->execute();
+    $resultSet = $statement->fetchAll(PDO::FETCH_ASSOC);
+    return tosend($resultSet);
 }
 
-function getRole($User, $Pass){
-    $statement = getConnection()->prepare("SELECT Member_Role FROM tbl_members  WHERE Member_Username = ' . $User . ' AND Member_Password = ' . $Pass .'");
+function getAllAppointments($Family, $Member){
+    $statement = getConnection()->prepare("SELECT * FROM tbl_appointments  WHERE Family_ID = '". $Family . "' AND Member_ID = '" . $Member . "'");
     $statement->execute();
     $resultSet = $statement->fetchAll(PDO::FETCH_ASSOC);
+    return tosend($resultSet);
+}
+function getDeadlines($Family, $Member){
 
-    return $resultSet;
+}
+function getMember($User, $Pass){
+    $statement = getConnection()->prepare("SELECT Member_ID FROM tbl_members  WHERE Member_Username = '". $User . "' AND Member_Password = '" . $Pass . "'");
+    $statement->execute();
+    $resultSet = $statement->fetchAll(PDO::FETCH_ASSOC);
+    return tosend($resultSet);
+}
+function getFamily($User,$Pass){
+    $statement = getConnection()->prepare("SELECT Family_ID FROM tbl_familys WHERE Member_Username = '". $User . "' AND Member_Password = '" . $Pass . "'");
+    $statement->execute();
+    $resultSet = $statement->fetchAll(PDO::FETCH_ASSOC);
+    return tosend($resultSet);
+}
+
+
+//useful functions
+function tosend($resultSet){
+    if ($resultSet != null) {
+        $columns = empty($resultSet) ? array() : array_keys($resultSet[0]);
+        $idColumn = $columns[0];
+        $tableString = '<table border="1"><tr>';
+        $inputString = '';
+        $insertString = '';
+        if ($columns != "placeholder") {
+            foreach ($columns as $column) {
+                $tableString .= '<h5>' . $column . '</h5>';
+                $inputString .= '<h5>' . $column . '</h5>';
+                $insertString .= '<td><input type=\'text\' name=\'' . $column . '\'/></td>';
+            }
+            foreach ($resultSet as $row) {
+                foreach ($row as $cell) {
+                    $send = $cell;
+                }
+            }
+        }
+        return $send;
+    }
 }

@@ -6,7 +6,7 @@ include_once 'Extras/Webfunctions.php';
 <html>
 <!-- Header with image -->
 <div class="header">
-    <h1>Welcome [-]</h1>
+    <h1>Welcome</h1>
     <button onclick="Logout()" style="position: absolute; right: 50px; top: 30px">Log out</button>
 </div>
 <body>

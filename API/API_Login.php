@@ -9,6 +9,18 @@ function sendlogin(){
 
         $role = getRole($user, $pass);
 
-        
+        if($role == "Parent"){
+            $name = getName($user, $pass);
+            $_SESSION["name"] = $name;
+            $_SESSION["role"] = $role;
+        } else if($role == "Child"){
+            $name = getName($user, $pass);
+            $_SESSION["name"] = $name;
+            $_SESSION["role"] = $role;
+        }
+
+
+
+
     }
 }

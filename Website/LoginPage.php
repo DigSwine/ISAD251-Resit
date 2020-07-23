@@ -30,6 +30,12 @@ include_once '../API/API_Login.php';
         <?php
         sendlogin();
         ?>
+        var role = "<?php echo $_SESSION["role"];?>";
+        if(role == "Parent"){
+            openParent();
+        } else if(role == "Child"){
+            openChild();
+        }
     }
 
 
