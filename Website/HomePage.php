@@ -1,8 +1,8 @@
 <?php
 include_once 'Extras/Stylesheet.php';
 include_once 'Extras/Webfunctions.php';
+session_start();
 ?>
-
 <html>
 <!-- Header with image -->
 <div class="header">

@@ -2,21 +2,13 @@
 include_once 'Extras/Stylesheet.php';
 include_once 'Extras/Webfunctions.php';
 include_once '../API/API_GetAppointments.php';
+session_start();
 ?>
-<script>
-    function onload(){
-        getAppts();
-        <?php
-           echo $_SESSION["appts"];
 
-
-        ?>
-    }
-</script>
 <html>
 <!-- Header with image -->
 <div class="header">
-    <h1>Welcome</h1>
+    <h1>Welcome <?php echo $_SESSION["name"] ?></h1>
     <button onclick="Logout()" style="position: absolute; right: 50px; top: 30px">Log out</button>
 </div>
 <body onload="onload()">
@@ -45,4 +37,13 @@ include_once '../API/API_GetAppointments.php';
 </div>
 </body>
 </html>
+<script>
+    function onload(){
+        <?php
+        getAppts();
 
+
+
+        ?>
+    }
+</script>

@@ -2,6 +2,7 @@
 include_once 'Extras/Stylesheet.php';
 include_once 'Extras/Webfunctions.php';
 include_once '../API/API_Login.php';
+session_start();
 ?>
 
 <html>
@@ -17,7 +18,7 @@ include_once '../API/API_Login.php';
     <div class="w3-content" style="padding-left: 50px;" >
         <form>
             <p>Username: <input name="user"; placeholder="Username"; type="text"></p>
-            <p>Password: <input name="pass"; placeholder="Password"; type="text"></p>
+            <p>Password: <input name="pass"; placeholder="Password"; type="password"></p>
             <button onclick="compare()" style="position: absolute; left: 150px">Login</button>
         </form>
     </div>

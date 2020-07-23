@@ -19,13 +19,12 @@
     }
 
     function Logout() {
-        <?php
-        $_SESSION["name"] = "";
-        $_SESSION["role"] = "";
-        ?>
         window.open(
             'HomePage.php',
             '_blank');
+        <?php
+            #------ needs fixing ---------
+        echo $_SESSION["user"] ?>
         close();
     }
 
