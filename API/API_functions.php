@@ -23,9 +23,9 @@ function getConnection()
 //Getters
 function getAll($User, $Pass){
     $_SESSION["role"] = getRole($User, $Pass);
-    $_SESSION["getName"] = getName($User, $Pass);
+    $_SESSION["name"] = getName($User, $Pass);
     $_SESSION["member"] = getMember($User, $Pass);
-    $_SESSION["family"] = getFamily($User, $Pass);
+    $_SESSION["family"] = getFamily($_SESSION["member"]);
 }
 function getRole($User, $Pass){
     $statement = getConnection()->prepare("SELECT Member_Role FROM tbl_members  WHERE Member_Username = '". $User . "' AND Member_Password = '" . $Pass . "'");
@@ -41,10 +41,15 @@ function getName($User, $Pass){
 }
 
 function getAllAppointments($Family, $Member){
-    $statement = getConnection()->prepare("SELECT * FROM tbl_appointments  WHERE Family_ID = '". $Family . "' AND Member_ID = '" . $Member . "'");
+    $statement = getConnection()->prepare("SELECT Appointment_Location FROM tbl_appointments  WHERE Family_ID = '". $Family . "' AND Member_ID = '" . $Member . "'");
     $statement->execute();
-    $resultSet = $statement->fetchAll(PDO::FETCH_ASSOC);
-    return tosend($resultSet);
+    $location = $statement->fetchAll(PDO::FETCH_ASSOC);
+    $loc = tosend($location);
+    $statement = getConnection()->prepare("SELECT Appointment_Datetime FROM tbl_appointments  WHERE Family_ID = '". $Family . "' AND Member_ID = '" . $Member . "'");
+    $statement->execute();
+    $datetime = $statement->fetchAll(PDO::FETCH_ASSOC);
+    $DT = tosend($datetime);
+    return $loc + $DT;
 }
 function getDeadlines($Family, $Member){
 
@@ -55,8 +60,8 @@ function getMember($User, $Pass){
     $resultSet = $statement->fetchAll(PDO::FETCH_ASSOC);
     return tosend($resultSet);
 }
-function getFamily($User,$Pass){
-    $statement = getConnection()->prepare("SELECT Family_ID FROM tbl_familys WHERE Member_Username = '". $User . "' AND Member_Password = '" . $Pass . "'");
+function getFamily($Mem){
+    $statement = getConnection()->prepare("SELECT Family_ID FROM tbl_familys WHERE Member_ID = '" . $Mem . "'");
     $statement->execute();
     $resultSet = $statement->fetchAll(PDO::FETCH_ASSOC);
     return tosend($resultSet);

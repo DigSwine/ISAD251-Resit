@@ -2,10 +2,12 @@
 include_once 'API_functions.php';
 function getAppts()
 {
-    echo "here";
     //check that $_SESSION contains 'role'
     if (isset($_SESSION["role"])) {
-        echo $_SESSION["role"];
-        echo $_SESSION["user"];
+        getAll($_SESSION["user"], $_SESSION["pass"]);
+
+        $Appts = getAllAppointments($_SESSION["family"], $_SESSION["member"]);
+
+        $_SESSION["Appts"] = $Appts;
     }
 }

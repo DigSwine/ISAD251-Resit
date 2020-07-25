@@ -28,6 +28,7 @@ session_start();
                 </tr>
                 <tr>
                     <td style="padding-left: 10px">Jeff</td>
+                    <td style="padding-left: 10px">Doctors</td>
                     <td style="padding-left: 10px">11am</td>
                     <td style="padding-left: 10px">25/07/2020</td>
                 </tr>
@@ -41,9 +42,14 @@ session_start();
     function onload(){
         <?php
         getAppts();
-
-
-
         ?>
+        var loc = <?php echo $_SESSION["Appts"] ?>
+    }
+
+    function Logout(){
+        <?php
+        session_destroy();
+        ?>
+        Backtohome();
     }
 </script>

@@ -18,16 +18,6 @@
         close();
     }
 
-    function Logout() {
-        window.open(
-            'HomePage.php',
-            '_blank');
-        <?php
-            #------ needs fixing ---------
-        echo $_SESSION["user"] ?>
-        close();
-    }
-
     function openParent() {
         window.open(
             'ParentView.php',

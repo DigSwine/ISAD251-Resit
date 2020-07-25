@@ -48,3 +48,17 @@ session_start();
 </div>
 </body>
 </html>
+<script>
+    function onload(){
+        <?php
+        #getAppts();
+        ?>
+    }
+
+    function Logout(){
+        <?php
+        session_destroy();
+        ?>
+        Backtohome();
+    }
+</script>
