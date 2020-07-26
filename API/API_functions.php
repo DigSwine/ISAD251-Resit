@@ -41,15 +41,9 @@ function getName($User, $Pass){
 }
 
 function getAllAppointments($Family, $Member){
-    $statement = getConnection()->prepare("SELECT Appointment_Location FROM tbl_appointments  WHERE Family_ID = '". $Family . "' AND Member_ID = '" . $Member . "'");
+    $statement = getConnection()->prepare("SELECT * FROM tbl_appointments  WHERE Family_ID = '". $Family . "' AND Member_ID = '" . $Member . "'");
     $statement->execute();
-    $location = $statement->fetchAll(PDO::FETCH_ASSOC);
-    $loc = tosend($location);
-    $statement = getConnection()->prepare("SELECT Appointment_Datetime FROM tbl_appointments  WHERE Family_ID = '". $Family . "' AND Member_ID = '" . $Member . "'");
-    $statement->execute();
-    $datetime = $statement->fetchAll(PDO::FETCH_ASSOC);
-    $DT = tosend($datetime);
-    return $loc + $DT;
+    return $statement->fetchAll(PDO::FETCH_ASSOC);
 }
 function getDeadlines($Family, $Member){
 

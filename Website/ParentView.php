@@ -27,10 +27,7 @@ session_start();
                     <th style="padding-left: 10px">Date</th>
                 </tr>
                 <tr>
-                    <td style="padding-left: 10px">Jeff</td>
-                    <td style="padding-left: 10px">Doctors</td>
-                    <td style="padding-left: 10px">11am</td>
-                    <td style="padding-left: 10px">25/07/2020</td>
+                    <td id="demo"></td>
                 </tr>
             </table>
         </div>
@@ -43,12 +40,39 @@ session_start();
         <?php
         getAppts();
         ?>
-        var loc = <?php echo $_SESSION["Appts"] ?>
+        var x = 0;
+        var cell = [];
+        <?php
+        $resultSet = $_SESSION["Appts"];
+        if ($resultSet != null) {
+            $columns = empty($resultSet) ? array() : array_keys($resultSet[0]);
+            $idColumn = $columns[0];
+            $tableString = '<table border="1"><tr>';
+            $inputString = '';
+            $insertString = '';
+            #foreach ($columns as $column) {
+              #  $tableString .= '<h5>' . $column . '</h5>';
+             #   $inputString .= '<h5>' . $column . '</h5>';
+            #    $insertString .= '<td><input type=\'text\' name=\'' . $column . '\'/></td>';
+           # }
+            foreach ($resultSet as $row) {
+                foreach ($row as $cell) {
+                    "cell[x] = "$cell;
+                    echo $cell;
+                    x = x + 1;
+                }
+            }
+        }
+        ?>
+        for(var y =0; y > x; y++){
+            print x[y];
+        }
     }
 
     function Logout(){
         <?php
         session_destroy();
+        echo "done";
         ?>
         Backtohome();
     }

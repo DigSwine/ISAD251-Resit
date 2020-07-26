@@ -1,6 +1,8 @@
 <script>
     function Loginpage() {
-        window.open('LoginPage.php', '_blank');
+        window.open(
+            'LoginPage.php',
+            '_blank');
         close();
     }
 
