@@ -5,6 +5,23 @@ include_once '../API/API_GetAppointments.php';
 session_start();
 ?>
 
+<script>
+    function onload(){
+        <?php
+        getAppts();
+        ?>
+
+
+    }
+
+    function Logout(){
+        <?php
+        session_destroy();
+        ?>
+        Backtohome();
+    }
+</script>
+
 <html>
 <!-- Header with image -->
 <div class="header">
@@ -20,14 +37,32 @@ session_start();
         <div>
             <table>
                 <tr>
-                
                     <th style="padding-left: 10px">Who For</th>
                     <th style="padding-left: 10px">Where</th>
                     <th style="padding-left: 10px">Time</th>
                     <th style="padding-left: 10px">Date</th>
                 </tr>
                 <tr>
-                    <td id="demo"></td>
+                     <?php
+                     $resultSet = $_SESSION["Appts"];
+                     $x = 0;
+                     if ($resultSet != null) {
+                         foreach ($resultSet as $row) {
+                             foreach ($row as $cell) {
+                                 if ($x == 0) {
+                                 } else if ($x == 2) {
+                                 } else if ($cell == null){
+                                     } else {
+                                     echo "<td style='padding-left: 10px;'>", $cell, "</td>";
+                                 }
+                                 $x = $x + 1;
+                             }
+                             #add new line and reset x
+                             echo "<tr>", "</tr>";
+                             $x = 0;
+                         }
+                     }
+                     ?>
                 </tr>
             </table>
         </div>
@@ -35,45 +70,3 @@ session_start();
 </div>
 </body>
 </html>
-<script>
-    function onload(){
-        <?php
-        getAppts();
-        ?>
-        var x = 0;
-        var cell = [];
-        <?php
-        $resultSet = $_SESSION["Appts"];
-        if ($resultSet != null) {
-            $columns = empty($resultSet) ? array() : array_keys($resultSet[0]);
-            $idColumn = $columns[0];
-            $tableString = '<table border="1"><tr>';
-            $inputString = '';
-            $insertString = '';
-            #foreach ($columns as $column) {
-              #  $tableString .= '<h5>' . $column . '</h5>';
-             #   $inputString .= '<h5>' . $column . '</h5>';
-            #    $insertString .= '<td><input type=\'text\' name=\'' . $column . '\'/></td>';
-           # }
-            foreach ($resultSet as $row) {
-                foreach ($row as $cell) {
-                    "cell[x] = "$cell;
-                    echo $cell;
-                    x = x + 1;
-                }
-            }
-        }
-        ?>
-        for(var y =0; y > x; y++){
-            print x[y];
-        }
-    }
-
-    function Logout(){
-        <?php
-        session_destroy();
-        echo "done";
-        ?>
-        Backtohome();
-    }
-</script>

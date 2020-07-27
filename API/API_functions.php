@@ -60,6 +60,12 @@ function getFamily($Mem){
     $resultSet = $statement->fetchAll(PDO::FETCH_ASSOC);
     return tosend($resultSet);
 }
+function getMemberName($input){
+    $statement = getConnection()->prepare("SELECT Member_ID FROM tbl_members WHERE Member_ID = '" . $input . "'");
+    $statement->execute();
+    $resultSet = $statement->fetchAll(PDO::FETCH_ASSOC);
+    return tosend($resultSet);
+}
 
 
 //useful functions
