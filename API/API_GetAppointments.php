@@ -11,3 +11,8 @@ function getAppts()
         $_SESSION["Appts"] = $Appts;
     }
 }
+
+function getApptName($cell)
+{
+    return getMemberName($cell);
+}

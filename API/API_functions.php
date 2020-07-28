@@ -41,7 +41,7 @@ function getName($User, $Pass){
 }
 
 function getAllAppointments($Family, $Member){
-    $statement = getConnection()->prepare("SELECT * FROM tbl_appointments  WHERE Family_ID = '". $Family . "' AND Member_ID = '" . $Member . "'");
+    $statement = getConnection()->prepare("SELECT * FROM tbl_appointments  WHERE Family_ID = '". $Family . "'");
     $statement->execute();
     return $statement->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -61,10 +61,16 @@ function getFamily($Mem){
     return tosend($resultSet);
 }
 function getMemberName($input){
-    $statement = getConnection()->prepare("SELECT Member_ID FROM tbl_members WHERE Member_ID = '" . $input . "'");
+    $statement = getConnection()->prepare("SELECT Member_Name FROM tbl_members WHERE Member_ID = '" . $input . "'");
     $statement->execute();
     $resultSet = $statement->fetchAll(PDO::FETCH_ASSOC);
     return tosend($resultSet);
+}
+
+function getFamilyMembers($fam){
+    $statement = getConnection()->prepare("SELECT Member_Name FROM tbl_members WHERE Family_ID = '" . $fam . "'");
+    $statement->execute();
+    return $statement->fetchAll(PDO::FETCH_ASSOC);
 }
 
 

@@ -16,4 +16,18 @@
         width: 50%;
         padding: 10px;
     }
+
+    .container, .container input, select{
+        width: 100%;
+    }
+
+
+    table, th, td {
+        padding-left: 10px;
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    th {
+        text-align: left;
+    }
 </style>
