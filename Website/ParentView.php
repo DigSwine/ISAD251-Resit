@@ -6,7 +6,7 @@ include_once  '../API/API_GetFamily.php';
 include_once  '../API/API_SendAppt.php';
 session_start();
 ?>
-<script>
+<script type="text/javascript">
     function onload(){
         <?php
         getAppts();
@@ -50,12 +50,32 @@ session_start();
         }
     }
 
-    function subAdd(){
-        <?php
-            #echo $_POST["newappt"];
+    function saveoption(sel) {
+        //set the hidden textbox value
+        document.getElementById('whos').value = sel.options[sel.selectedIndex].text;
+    }
 
-        ?>
-        addappt();
+    function addnewappt() {
+        //sending data to api
+        const addform = document.getElementById("addnewappoinment");
+
+        addform.addEventListener('submit', function (e) {
+            //stop reloading
+            e.preventDefault();
+            //get form data
+            const formData = new FormData(this);
+            //send data
+            fetch('../API/API_SendAppt.php', {
+                method: 'post',
+                body: formData
+            }).then(function (response) {
+                return response.text();
+            }).then(function (text) {
+                console.log(text);
+            }).catch(function (error) {
+                console.error();
+            })
+        })
     }
 </script>
 
@@ -93,20 +113,12 @@ session_start();
                              foreach ($row as $cell) {
                                  if ($x == 0) {
                                  } else if ($x == 2) {
-                                 } else if ($cell == null){
-                                     } else {
+                                 } else if ($cell == null) {
+                                 } else {
                                      if ($x == 1) {
                                          $cell = getApptName($cell);
                                      }
-                                     if ($x == 4) {
-                                         $dateandtime = explode(" ", $cell);
-                                         echo "<td>", $dateandtime[1], "</td>";
-
-                                         $datereversed = date("d-m-Y", strtotime($dateandtime[0]));
-                                         echo "<td>", $datereversed, "</td>";
-                                     } else {
-                                         echo "<td>", $cell, "</td>";
-                                     }
+                                     echo "<td>", $cell, "</td>";
                                  }
                                  $x = $x + 1;
                              }
@@ -123,9 +135,9 @@ session_start();
 </div>
 <div id="Addform" class="views"; style="padding-top: 20px; max-width: 50%;">
     <div class="container" style="padding-left: 10px; max-width: 100%">
-        <form method="post" name="newappt">
-            <label>Who For: </label>
-            <select id="whos">
+        <form id="addnewappoinment">
+            <label for="whos">Who For: </label>
+            <select onchange="saveoption(this)" id="whoholder">
                 <?php
                 retriveFam();
 
@@ -138,14 +150,15 @@ session_start();
                     }
                 }
                 ?>
-            </select><br><br>
-            <label>Where: </label>
-            <input type="text" id="location"><br><br>
-            <label>Time: </label>
-            <input type="text" id="time"><br><br>
-            <label>Date: </label>
-            <input type="text" id="date"><br><br><br>
-            <input type="submit" value="Submit" onclick="subAdd()">
+            </select>
+            <input type="text" id="whos" name="whos" hidden> <br><br>
+            <label for="location">Where: </label>
+            <input type="text" name="location"><br><br>
+            <label for="time">Time: </label>
+            <input type="text" name="time"><br><br>
+            <label for="date">Date: </label>
+            <input type="text" name="date"><br><br><br>
+            <input type="submit" value="Submit" onclick="addnewappt()">
         </form>
     </div>
 </div>

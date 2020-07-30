@@ -1,7 +1,7 @@
 <?php
 include_once 'API_functions.php';
 function sendlogin(){
-    //check that $_SESSION contains 'user'
+    //check that $_GET contains 'user'
     if (isset($_GET["user"])) {
         //save them username and password into a local variable
         $_SESSION["user"] = $_GET["user"];

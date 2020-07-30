@@ -67,11 +67,28 @@ function getMemberName($input){
     return tosend($resultSet);
 }
 
+function getMemberID($mem, $fam){
+    $statement = getConnection()->prepare("SELECT Member_ID FROM tbl_members WHERE Member_Name = '" . $mem . "' AND Family_ID = '" . $fam . "'");
+    $statement->execute();
+    $resultSet = $statement->fetchAll(PDO::FETCH_ASSOC);
+    return tosend($resultSet);
+}
+
 function getFamilyMembers($fam){
     $statement = getConnection()->prepare("SELECT Member_Name FROM tbl_members WHERE Family_ID = '" . $fam . "'");
     $statement->execute();
     return $statement->fetchAll(PDO::FETCH_ASSOC);
 }
+
+//senders
+function setNewAppt($fam, $who, $loc, $time, $date){
+    $whoid = getMemberID($who, $fam);
+    $statement = getConnection()->prepare("INSERT INTO `tbl_appointments` (`Appointment_ID`, `Member_ID`, `Family_ID`, `Appointment_Location`, `Appointment_Time`, `Appointment_Date`) VALUES (NULL, '" . $whoid . "', '" . $fam . "', '" . $loc . "', '" . $time . "', '" . $date . "')");
+    $statement->execute();
+}
+
+
+
 
 
 //useful functions
