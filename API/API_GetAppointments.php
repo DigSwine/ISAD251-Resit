@@ -6,6 +6,7 @@ function getAppts()
     if (isset($_SESSION["role"])) {
         getAll($_SESSION["user"], $_SESSION["pass"]);
 
+        $_SESSION["Testing"] = getFamilyMembers($_SESSION["family"]);
         $Appts = getAllAppointments($_SESSION["family"], $_SESSION["member"]);
 
         $_SESSION["Appts"] = $Appts;

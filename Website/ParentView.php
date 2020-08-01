@@ -2,7 +2,6 @@
 include_once 'Extras/Stylesheet.php';
 include_once 'Extras/Webfunctions.php';
 include_once '../API/API_GetAppointments.php';
-include_once  '../API/API_GetFamily.php';
 include_once  '../API/API_SendAppt.php';
 session_start();
 ?>
@@ -11,9 +10,9 @@ session_start();
         <?php
         getAppts();
         ?>
-        addappt();
-        editappt();
-        deleteappt();
+        formview("Addform");
+        formview("Editform");
+        formview("Deleteform");
     }
 
     function Logout(){
@@ -23,29 +22,13 @@ session_start();
         Backtohome();
     }
 
-    function addappt(){
-        var x = document.getElementById("Addform");
+    function formview(name){
+        var x = document.getElementById(name);
         if (x.style.display === "none") {
+           //show
             x.style.display = "block";
         } else {
-            x.style.display = "none";
-        }
-    }
-
-    function editappt(){
-        var x = document.getElementById("Editform");
-        if (x.style.display === "none") {
-            x.style.display = "block";
-        } else {
-            x.style.display = "none";
-        }
-    }
-
-    function deleteappt(){
-        var x = document.getElementById("Deleteform");
-        if (x.style.display === "none") {
-            x.style.display = "block";
-        } else {
+            //hide
             x.style.display = "none";
         }
     }
@@ -55,17 +38,28 @@ session_start();
         document.getElementById('whos').value = sel.options[sel.selectedIndex].text;
     }
 
-    function addnewappt() {
-        //sending data to api
-        const addform = document.getElementById("addnewappoinment");
+    function saveappt(get) {
+        var sendto = "";
+        var openedform = "";
+        if(get == "addnewappoinment"){
+            sendto = '../API/API_SendAppt.php';
+            openedform = "Addform";
+        }
+        if(get == "editappoinment"){
+            sendto = '../API/API_SendAppt.php';
+            openedform = "Editform";
+        }
 
-        addform.addEventListener('submit', function (e) {
+        //sending data to api
+        const form = document.getElementById(get);
+
+        form.addEventListener('submit', function (e) {
             //stop reloading
             e.preventDefault();
             //get form data
             const formData = new FormData(this);
             //send data
-            fetch('../API/API_SendAppt.php', {
+            fetch(sendto, {
                 method: 'post',
                 body: formData
             }).then(function (response) {
@@ -76,7 +70,20 @@ session_start();
                 console.error();
             })
         })
+        formview(openedform);
     }
+
+    function getdetails(sel){
+        var text = sel.options[sel.selectedIndex].text;
+        var str = text.split(" ");
+        var who = str[0];
+        var time = str[2];
+        var date = str[3];
+        console.log(who);
+        console.log(time);
+        console.log(date);
+    }
+
 </script>
 
 <html>
@@ -89,15 +96,15 @@ session_start();
 <!-- Appt section -->
 <div class="views"; style="padding-top: 20px; max-width: 50%;">
     <div class="w3-content" style="padding-left: 50px;">
-        <button onclick="addappt()">Add Appointment</button>
-        <button>Edit Appointment</button>
-        <button>Delete Appointment</button>
+        <button onclick="formview('Addform')" id="btn_Add">Add Appointment</button>
+        <button onclick="formview('Editform')" id="btn_Edit">Edit Appointment</button>
+        <button onclick="formview('Deleteform')" id="btn_Delete">Delete Appointment</button>
         <br><br>
     </div>
     <div class="w3-content" style="padding-left: 50px;" >
         <h5>List of upcoming appointments:</h5>
         <div>
-            <table>
+            <table id="maintable">
                 <tr>
                     <th>Who For</th>
                     <th>Where</th>
@@ -138,9 +145,8 @@ session_start();
         <form id="addnewappoinment">
             <label for="whos">Who For: </label>
             <select onchange="saveoption(this)" id="whoholder">
+                <option value="select">-- Please Select Family Member --</option>
                 <?php
-                retriveFam();
-
                 $results = $_SESSION["Testing"];
                 if ($results != null) {
                     foreach ($results as $row) {
@@ -151,20 +157,63 @@ session_start();
                 }
                 ?>
             </select>
+            <label for="family" hidden></label>
+            <input type="text" id="family" name="family" value="<?php echo $_SESSION["family"] ?>" hidden>
             <input type="text" id="whos" name="whos" hidden> <br><br>
             <label for="location">Where: </label>
-            <input type="text" name="location"><br><br>
+            <input type="text" name="location" id="location"><br><br>
             <label for="time">Time: </label>
             <input type="text" name="time"><br><br>
             <label for="date">Date: </label>
             <input type="text" name="date"><br><br><br>
-            <input type="submit" value="Submit" onclick="addnewappt()">
+            <input type="submit" value="Submit" onclick="saveappt('addnewappoinment')">
         </form>
     </div>
 </div>
 <div id="Editform" class="views"; style="padding-top: 20px; max-width: 50%;">
-
-<p>editform</p>
+    <div class="container" style="padding-left: 10px; max-width: 100%">
+        <form id="editappoinment">
+            <label for="forwho">Who For: </label>
+            <select onchange="getdetails(this)" id="whatselecter">
+                <option value="select">-- Please Select Appointment to Edit--</option>
+                <?php
+                $results = $_SESSION["Appts"];
+                if ($results != null) {
+                    foreach ($results as $row) {
+                        $stringed = "";
+                        $x = 0;
+                        foreach ($row as $cell) {
+                            if ($x == 0) {
+                                //apptid
+                            } else if ($x == 1){
+                                //memid
+                                $stringed = getApptName($cell);
+                                $stringed .= " ";
+                            } else if($x == 2){
+                                //famid
+                            } else {
+                                $cell .= " ";
+                                $stringed .= $cell;
+                            }
+                            $x = $x + 1;
+                        }
+                        echo "<option value='" . $stringed . "'>", $stringed, "</option>";
+                    }
+                }
+                ?>
+            </select>
+            <label for="family" hidden></label>
+            <input type="text" id="family" name="family" value="<?php echo $_SESSION["family"] ?>" hidden>
+            <input type="text" id="forwho" name="forwho" hidden> <br><br>
+            <label for="location">Where: </label>
+            <input type="text" name="location" id="location"><br><br>
+            <label for="time">Time: </label>
+            <input type="text" name="time"><br><br>
+            <label for="date">Date: </label>
+            <input type="text" name="date"><br><br><br>
+            <input type="submit" value="Submit" onclick="saveappt('editappoinment')">
+        </form>
+    </div>
 </div>
 <div id="Deleteform" class="views"; style="padding-top: 20px; max-width: 50%;">
 
