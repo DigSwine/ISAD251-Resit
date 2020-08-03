@@ -39,14 +39,10 @@ function getName($User, $Pass){
     $resultSet = $statement->fetchAll(PDO::FETCH_ASSOC);
     return tosend($resultSet);
 }
-
 function getAllAppointments($Family, $Member){
     $statement = getConnection()->prepare("SELECT * FROM tbl_appointments  WHERE Family_ID = '". $Family . "'");
     $statement->execute();
     return $statement->fetchAll(PDO::FETCH_ASSOC);
-}
-function getDeadlines($Family, $Member){
-
 }
 function getMember($User, $Pass){
     $statement = getConnection()->prepare("SELECT Member_ID FROM tbl_members  WHERE Member_Username = '". $User . "' AND Member_Password = '" . $Pass . "'");
@@ -66,18 +62,28 @@ function getMemberName($input){
     $resultSet = $statement->fetchAll(PDO::FETCH_ASSOC);
     return tosend($resultSet);
 }
-
 function getMemberID($mem, $fam){
     $statement = getConnection()->prepare("SELECT Member_ID FROM tbl_members WHERE Member_Name = '" . $mem . "' AND Family_ID = '" . $fam . "'");
     $statement->execute();
     $resultSet = $statement->fetchAll(PDO::FETCH_ASSOC);
     return tosend($resultSet);
 }
-
 function getFamilyMembers($fam){
     $statement = getConnection()->prepare("SELECT Member_Name FROM tbl_members WHERE Family_ID = '" . $fam . "'");
     $statement->execute();
     return $statement->fetchAll(PDO::FETCH_ASSOC);
+}
+function getTheNote($ApptID){
+    $statement = getConnection()->prepare("SELECT 	Appointment_Note FROM tbl_appointments WHERE Appointment_ID = '" . $ApptID . "'");
+    $statement->execute();
+    return tosend($statement->fetchAll(PDO::FETCH_ASSOC));
+}
+
+//deletes
+function delAppt($fam, $who, $loc, $time, $date){
+    $whoid = getMemberID($who, $fam);
+    $statement = getConnection()->prepare("DELETE FROM tbl_appointments WHERE Family_ID = '".$fam."' AND Member_ID = '".$whoid."' AND Appointment_Location = '".$loc."' AND Appointment_Time = '".$time."' AND Appointment_Date = '".$date."'");
+    $statement->execute();
 }
 
 //senders
@@ -86,7 +92,11 @@ function setNewAppt($fam, $who, $loc, $time, $date){
     $statement = getConnection()->prepare("INSERT INTO `tbl_appointments` (`Appointment_ID`, `Member_ID`, `Family_ID`, `Appointment_Location`, `Appointment_Time`, `Appointment_Date`) VALUES (NULL, '" . $whoid . "', '" . $fam . "', '" . $loc . "', '" . $time . "', '" . $date . "')");
     $statement->execute();
 }
-
+function setEditedAppt($fam, $who, $loc, $time, $date, $note){
+    $whoid = getMemberID($who, $fam);
+    $statement = getConnection()->prepare("INSERT INTO `tbl_appointments` (`Appointment_ID`, `Member_ID`, `Family_ID`, `Appointment_Location`, `Appointment_Time`, `Appointment_Date`, `Appointment_Note`) VALUES (NULL, '" . $whoid . "', '" . $fam . "', '" . $loc . "', '" . $time . "', '" . $date . "', '" . $note . "')");
+    $statement->execute();
+}
 
 
 

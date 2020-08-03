@@ -3,6 +3,8 @@ include_once 'Extras/Stylesheet.php';
 include_once 'Extras/Webfunctions.php';
 include_once '../API/API_GetAppointments.php';
 include_once  '../API/API_SendAppt.php';
+include_once  '../API/API_EditAppt.php';
+include_once  '../API/API_DelAppt.php';
 session_start();
 ?>
 <script type="text/javascript">
@@ -13,43 +15,45 @@ session_start();
         formview("Addform");
         formview("Editform");
         formview("Deleteform");
+        formview("Newmember");
     }
-
     function Logout(){
         <?php
         session_destroy();
         ?>
         Backtohome();
     }
-
     function formview(name){
         var x = document.getElementById(name);
         if (x.style.display === "none") {
            //show
             x.style.display = "block";
+            clearallforms(x);
         } else {
             //hide
             x.style.display = "none";
         }
     }
-
     function saveoption(sel) {
         //set the hidden textbox value
         document.getElementById('whos').value = sel.options[sel.selectedIndex].text;
     }
-
     function saveappt(get) {
         var sendto = "";
         var openedform = "";
-        if(get == "addnewappoinment"){
+        if (get == "addnewappoinment") {
             sendto = '../API/API_SendAppt.php';
             openedform = "Addform";
-        }
-        if(get == "editappoinment"){
-            sendto = '../API/API_SendAppt.php';
+        } else if (get == "editappoinment") {
+            sendto = '../API/API_EditAppt.php';
             openedform = "Editform";
+        } else if (get == "deleteappoinment") {
+            sendto = '../API/API_DelAppt.php';
+            openedform = "Deleteform";
+        } else if (get == "AddNewMember"){
+            sendto = '../API/API_AddNewMember.php';
+            openedform = "Newmember";
         }
-
         //sending data to api
         const form = document.getElementById(get);
 
@@ -72,25 +76,80 @@ session_start();
         })
         formview(openedform);
     }
-
     function getdetails(sel){
         var text = sel.options[sel.selectedIndex].text;
         var str = text.split(" ");
         var who = str[0];
+        var loc = str[1];
         var time = str[2];
         var date = str[3];
-        console.log(who);
-        console.log(time);
-        console.log(date);
+
+
+        document.getElementById('oldforwho').value = who;
+        document.getElementById('oldloc').value = loc;
+        document.getElementById('oldtime').value = time;
+        document.getElementById('olddate').value = date;
+
+        document.getElementById('forwho').value = who;
+        document.getElementById('loc').value = loc;
+        document.getElementById('editedtime').value = time;
+        document.getElementById('editeddate').value = date;
+        document.getElementById('apptnote').value = note;
+
+        document.getElementById('delwho').value = who;
+        document.getElementById('dellocation').value = loc;
+        document.getElementById('deltime').value = time;
+        document.getElementById('deldate').value = date;
     }
+    function clearallforms(form) {
+        if(form.id == "Addform"){
+            document.getElementById("Editform").style.display = "none";
+            document.getElementById("Deleteform").style.display = "none";
+        }
+        if(form.id == "Editform"){
+            document.getElementById("Addform").style.display = "none";
+            document.getElementById("Deleteform").style.display = "none";
+        }
+        if(form.id == "Deleteform"){
+            document.getElementById("Editform").style.display = "none";
+            document.getElementById("Addform").style.display = "none";
+        }
 
+
+
+        //add page
+        document.getElementById('whoholder').options.selectedIndex = 0;
+        document.getElementById('whos').value = "";
+        document.getElementById('location').value = "";
+        document.getElementById('time').value = "";
+        document.getElementById('date').value = "";
+
+        //edit page
+        document.getElementById('whatselecter').options.selectedIndex = 0;
+        document.getElementById('oldforwho').value = "";
+        document.getElementById('oldloc').value = "";
+        document.getElementById('oldtime').value = "";
+        document.getElementById('olddate').value = "";
+        document.getElementById('forwho').value = "";
+        document.getElementById('loc').value = "";
+        document.getElementById('editedtime').value = "";
+        document.getElementById('editeddate').value = "";
+        document.getElementById('apptnote').value = "";
+
+        //delete page
+        document.getElementById('delholder').options.selectedIndex = 0;
+        document.getElementById('delwho').value = "";
+        document.getElementById('dellocation').value = "";
+        document.getElementById('deltime').value = "";
+        document.getElementById('deldate').value = "";
+    }
 </script>
-
 <html>
 <!-- Header -->
 <div class="header">
     <h1>Welcome <?php echo $_SESSION["name"] ?></h1>
     <button onclick="Logout()" style="position: absolute; right: 50px; top: 30px">Log out</button>
+    <button onclick="formview('Newmember')" style="position: absolute; right: 50px; top: 65px">Add New Family Member</button>
 </div>
 <body onload="onload()">
 <!-- Appt section -->
@@ -110,6 +169,7 @@ session_start();
                     <th>Where</th>
                     <th>Time</th>
                     <th>Date</th>
+                    <th>Note</th>
                 </tr>
                 <tr>
                      <?php
@@ -124,6 +184,13 @@ session_start();
                                  } else {
                                      if ($x == 1) {
                                          $cell = getApptName($cell);
+                                     } else if($x == 6){
+                                         //notes
+                                         if ($cell != null){
+
+                                         } else {
+                                             $cell = "No note avaliable";
+                                         }
                                      }
                                      echo "<td>", $cell, "</td>";
                                  }
@@ -163,17 +230,16 @@ session_start();
             <label for="location">Where: </label>
             <input type="text" name="location" id="location"><br><br>
             <label for="time">Time: </label>
-            <input type="text" name="time"><br><br>
+            <input type="text" name="time" id="time"><br><br>
             <label for="date">Date: </label>
-            <input type="text" name="date"><br><br><br>
+            <input type="text" name="date" id="date"><br><br><br>
             <input type="submit" value="Submit" onclick="saveappt('addnewappoinment')">
         </form>
     </div>
 </div>
 <div id="Editform" class="views"; style="padding-top: 20px; max-width: 50%;">
-    <div class="container" style="padding-left: 10px; max-width: 100%">
+    <div class="container" style="padding-left: 10px; max-width: 100%;">
         <form id="editappoinment">
-            <label for="forwho">Who For: </label>
             <select onchange="getdetails(this)" id="whatselecter">
                 <option value="select">-- Please Select Appointment to Edit--</option>
                 <?php
@@ -185,6 +251,7 @@ session_start();
                         foreach ($row as $cell) {
                             if ($x == 0) {
                                 //apptid
+
                             } else if ($x == 1){
                                 //memid
                                 $stringed = getApptName($cell);
@@ -203,21 +270,84 @@ session_start();
                 ?>
             </select>
             <label for="family" hidden></label>
-            <input type="text" id="family" name="family" value="<?php echo $_SESSION["family"] ?>" hidden>
-            <input type="text" id="forwho" name="forwho" hidden> <br><br>
+            <input type="text" id="family" name="family" value="<?php echo $_SESSION["family"] ?>" hidden><br>
+            <label for="forwho">Who For: </label>
+            <input type="text" id="forwho" name="forwho" > <br><br>
+            <input type="text" id="oldforwho" name="oldforwho" hidden>
             <label for="location">Where: </label>
-            <input type="text" name="location" id="location"><br><br>
-            <label for="time">Time: </label>
-            <input type="text" name="time"><br><br>
-            <label for="date">Date: </label>
-            <input type="text" name="date"><br><br><br>
+            <input type="text" name="location" id="loc"><br><br>
+            <input type="text" name="oldlocation" id="oldloc" hidden>
+            <label for="editedtime">Time: </label>
+            <input type="text" name="editedtime" id="editedtime"><br><br>
+            <input type="text" name="oldtime" id="oldtime" hidden>
+            <label for="editeddate">Date: </label>
+            <input type="text" name="editeddate" id="editeddate"><br><br>
+            <input type="text" name="olddate" id="olddate" hidden>
+            <label for="apptnote">Note: </label>
+            <input type="text" name="apptnote" id="apptnote"><br><br>
             <input type="submit" value="Submit" onclick="saveappt('editappoinment')">
         </form>
     </div>
 </div>
 <div id="Deleteform" class="views"; style="padding-top: 20px; max-width: 50%;">
-
-<p>deleteform</p>
+    <div class="container" style="padding-left: 10px; max-width: 100%">
+        <form id="deleteappoinment">
+            <select onchange="getdetails(this)" id="delholder">
+                <option value="select">-- Please Select Family Member --</option>
+                <?php
+                $results = $_SESSION["Appts"];
+                if ($results != null) {
+                    foreach ($results as $row) {
+                        $stringed = "";
+                        $x = 0;
+                        foreach ($row as $cell) {
+                            if ($x == 0) {
+                                //apptid
+                            } else if ($x == 1){
+                                //memid
+                                $stringed = getApptName($cell);
+                                $stringed .= " ";
+                            } else if($x == 2){
+                                //famid
+                            }  else if($x == 6){
+                                //notes
+                            } else {
+                                $cell .= " ";
+                                $stringed .= $cell;
+                            }
+                            $x = $x + 1;
+                        }
+                        echo "<option value='" . $stringed . "'>", $stringed, "</option>";
+                    }
+                }
+                ?>
+            </select>
+            <label for="family" hidden></label>
+            <input type="text" id="family" name="family" value="<?php echo $_SESSION["family"] ?>" hidden>
+            <input type="text" id="delwho" name="delwho" hidden>
+            <input type="text" name="dellocation" id="dellocation" hidden>
+            <input type="text" name="deltime" id="deltime" hidden>
+            <input type="text" name="deldate" id="deldate" hidden><br><br><br>
+            <input type="submit" value="Submit" onclick="saveappt('deleteappoinment')">
+        </form>
+    </div>
+</div>
+<div id="Newmember" class="views"; style="padding-top: 20px; max-width: 50%;">
+<div class="container" style="padding-left: 10px; max-width: 100%">
+    <form id="AddNewMember">
+        <label for="family" hidden></label>
+        <input type="text" id="family" name="family" value="<?php echo $_SESSION["family"] ?>" hidden>
+        <input type="text" id="whosnew" name="whosnew"><br><br>
+        <select>
+            <option>Parent</option>
+            <option>Child</option>
+        </select>
+        <input type="text" name="PorC" id="PorC" hidden><br><br>
+        <input type="text" name="NewUser" id="NewUser"><br><br>
+        <input type="text" name="NewPass" id="NewPass"><br><br><br>
+        <input type="submit" value="Submit" onclick="saveappt('AddNewMember')">
+    </form>
+</div>
 </div>
 </body>
 </html>

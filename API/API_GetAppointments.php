@@ -17,3 +17,7 @@ function getApptName($cell)
 {
     return getMemberName($cell);
 }
+
+function getNote($need){
+    return getTheNote($note);
+}
