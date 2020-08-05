@@ -15,11 +15,13 @@ session_start();
 <!-- Add a background color to the form -->
 <div id="about"; style="padding-top: 20px; max-width: 100%;">
     <!-- Login Container -->
-    <div class="w3-content" style="padding-left: 50px;" >
-        <form>
-            <p>Username: <input name="user"; placeholder="Username"; type="text"></p>
-            <p>Password: <input name="pass"; placeholder="Password"; type="password"></p>
-            <button onclick="compare()" style="position: absolute; left: 150px">Login</button>
+    <div class="container" style="padding-left: 50px;" >
+        <form id="loginform">
+            <label for="user">Username: </label>
+            <input id="user" name="user"; placeholder="Username"; type="text"><br><br>
+            <label for="pass">Password: </label>
+            <input id="pass" name="pass"; placeholder="Password"; type="password"><br><br><br>
+            <input type="submit" value="Submit" onclick="compare('loginform')">
         </form>
     </div>
 </div>
@@ -27,17 +29,34 @@ session_start();
 </html>
 
 <script>
-    function compare() {
-        <?php
-        sendlogin();
-        ?>
-        var role = "<?php echo $_SESSION["role"];?>";
-        if(role == "Parent"){
-            openParent();
-        } else if(role == "Child"){
-            openChild();
-        }
+    function compare(get) {
+        //sending data to api
+        const form = document.getElementById(get);
+
+        form.addEventListener('submit', function (e) {
+            //stop reloading
+            e.preventDefault();
+            //get form data
+            const formData = new FormData(this);
+            //send data
+            fetch('../API/API_Login.php', {
+                method: 'post',
+                body: formData
+            }).then(function (response) {
+                return response.text();
+            }).then(function (text) {
+                console.log(text);
+                if(text == "P"){
+                    openParent();
+                } else if (text == "C"){
+                    openChild();
+                } else {
+                 alert("Username or Password is incorrect: Please try again.")
+                }
+
+            }).catch(function (error) {
+                console.error();
+            })
+        })
     }
-
-
 </script>

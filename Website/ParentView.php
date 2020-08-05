@@ -1,6 +1,6 @@
 <?php
-include_once 'Extras/Stylesheet.php';
 include_once 'Extras/Webfunctions.php';
+include_once 'Extras/Stylesheet.php';
 include_once '../API/API_GetAppointments.php';
 include_once  '../API/API_SendAppt.php';
 include_once  '../API/API_EditAppt.php';
@@ -51,7 +51,7 @@ session_start();
             sendto = '../API/API_DelAppt.php';
             openedform = "Deleteform";
         } else if (get == "AddNewMember"){
-            sendto = '../API/API_AddNewMember.php';
+            sendto = '../API/Members/API_AddNewMember.php';
             openedform = "Newmember";
         }
         //sending data to api
@@ -78,12 +78,12 @@ session_start();
     }
     function getdetails(sel){
         var text = sel.options[sel.selectedIndex].text;
-        var str = text.split(" ");
+        var str = text.split(", ");
         var who = str[0];
         var loc = str[1];
         var time = str[2];
         var date = str[3];
-
+        var note = str[4];
 
         document.getElementById('oldforwho').value = who;
         document.getElementById('oldloc').value = loc;
@@ -105,16 +105,23 @@ session_start();
         if(form.id == "Addform"){
             document.getElementById("Editform").style.display = "none";
             document.getElementById("Deleteform").style.display = "none";
+            document.getElementById("Newmember").style.display = "none";
         }
         if(form.id == "Editform"){
             document.getElementById("Addform").style.display = "none";
             document.getElementById("Deleteform").style.display = "none";
+            document.getElementById("Newmember").style.display = "none";
         }
         if(form.id == "Deleteform"){
             document.getElementById("Editform").style.display = "none";
             document.getElementById("Addform").style.display = "none";
+            document.getElementById("Newmember").style.display = "none";
         }
-
+        if(form.id == "Newmember"){
+            document.getElementById("Editform").style.display = "none";
+            document.getElementById("Addform").style.display = "none";
+            document.getElementById("Deleteform").style.display = "none";
+        }
 
 
         //add page
@@ -142,12 +149,23 @@ session_start();
         document.getElementById('dellocation').value = "";
         document.getElementById('deltime').value = "";
         document.getElementById('deldate').value = "";
+
+        //newmember page
+        document.getElementById('CorPHolder').options.selectedIndex = 0;
+        document.getElementById('PorC').value = "";
+        document.getElementById('NewUser').value = "";
+        document.getElementById('NewPass').value = "";
+
+    }
+    function CorpSave(sel) {
+        //set the hidden textbox value
+        document.getElementById('PorC').value = sel.options[sel.selectedIndex].text;
     }
 </script>
 <html>
 <!-- Header -->
 <div class="header">
-    <h1>Welcome <?php echo $_SESSION["name"] ?></h1>
+    <h1>Welcome <?php echo $_SESSION["name"]?></h1>
     <button onclick="Logout()" style="position: absolute; right: 50px; top: 30px">Log out</button>
     <button onclick="formview('Newmember')" style="position: absolute; right: 50px; top: 65px">Add New Family Member</button>
 </div>
@@ -255,11 +273,13 @@ session_start();
                             } else if ($x == 1){
                                 //memid
                                 $stringed = getApptName($cell);
-                                $stringed .= " ";
+                                $stringed .= ", ";
                             } else if($x == 2){
                                 //famid
+                            } else if($x == 6){
+                                $stringed .= $cell;
                             } else {
-                                $cell .= " ";
+                                $cell .= ", ";
                                 $stringed .= $cell;
                             }
                             $x = $x + 1;
@@ -306,13 +326,13 @@ session_start();
                             } else if ($x == 1){
                                 //memid
                                 $stringed = getApptName($cell);
-                                $stringed .= " ";
+                                $stringed .= ", ";
                             } else if($x == 2){
                                 //famid
                             }  else if($x == 6){
                                 //notes
                             } else {
-                                $cell .= " ";
+                                $cell .= ", ";
                                 $stringed .= $cell;
                             }
                             $x = $x + 1;
@@ -337,13 +357,18 @@ session_start();
     <form id="AddNewMember">
         <label for="family" hidden></label>
         <input type="text" id="family" name="family" value="<?php echo $_SESSION["family"] ?>" hidden>
+        <label for="whosnew">First Name: </label>
         <input type="text" id="whosnew" name="whosnew"><br><br>
-        <select>
+        <label for="CorPHolder">Parent or Child: </label>
+        <select onchange="CorpSave(this)" id="CorPHolder">
+            <option>-- Please Select if the member is a Parent or Child</option>
             <option>Parent</option>
             <option>Child</option>
         </select>
         <input type="text" name="PorC" id="PorC" hidden><br><br>
+        <label for="NewUser">Username: </label>
         <input type="text" name="NewUser" id="NewUser"><br><br>
+        <label for="NewPass">Password: </label>
         <input type="text" name="NewPass" id="NewPass"><br><br><br>
         <input type="submit" value="Submit" onclick="saveappt('AddNewMember')">
     </form>

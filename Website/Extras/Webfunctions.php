@@ -15,7 +15,7 @@
 
     function Backtohome() {
         window.open(
-            'HomePage.php',
+            'index.php',
             '_blank');
         close();
     }

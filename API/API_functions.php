@@ -97,7 +97,10 @@ function setEditedAppt($fam, $who, $loc, $time, $date, $note){
     $statement = getConnection()->prepare("INSERT INTO `tbl_appointments` (`Appointment_ID`, `Member_ID`, `Family_ID`, `Appointment_Location`, `Appointment_Time`, `Appointment_Date`, `Appointment_Note`) VALUES (NULL, '" . $whoid . "', '" . $fam . "', '" . $loc . "', '" . $time . "', '" . $date . "', '" . $note . "')");
     $statement->execute();
 }
-
+function createmember($fam, $who, $pc, $user, $pass){
+    $statement = getConnection()->prepare("INSERT INTO `tbl_members` (`Member_ID`, `Family_ID`, `Member_Name`, `Member_Role`, `Member_Username`, `Member_Password`) VALUES (NULL, '" . $fam . "', '" . $who . "', '" . $pc . "', '" . $user . "', '" . $pass . "')");
+    $statement->execute();
+}
 
 
 
