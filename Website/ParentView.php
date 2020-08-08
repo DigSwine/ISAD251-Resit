@@ -1,17 +1,24 @@
 <?php
 include_once 'Extras/Webfunctions.php';
 include_once 'Extras/Stylesheet.php';
-include_once '../API/API_GetAppointments.php';
+include_once '../API/Appointments/API_GetAppointments.php';
 include_once  '../API/API_SendAppt.php';
 include_once  '../API/API_EditAppt.php';
 include_once  '../API/API_DelAppt.php';
-session_start();
 ?>
 <script type="text/javascript">
-    function onload(){
-        <?php
-        getAppts();
-        ?>
+    function onload() {
+        //send data
+        fetch('../API/API_GetAppointments.php', {
+            method: 'post'
+        }).then(function (response) {
+            return response.text();
+        }).then(function (text) {
+            console.log(text);
+        }).catch(function (error) {
+            console.error();
+        })
+
         formview("Addform");
         formview("Editform");
         formview("Deleteform");
@@ -40,19 +47,20 @@ session_start();
     }
     function saveappt(get) {
         var sendto = "";
-        var openedform = "";
         if (get == "addnewappoinment") {
             sendto = '../API/API_SendAppt.php';
-            openedform = "Addform";
+            formview("Addform");
         } else if (get == "editappoinment") {
             sendto = '../API/API_EditAppt.php';
-            openedform = "Editform";
+            formview("Editform");
         } else if (get == "deleteappoinment") {
             sendto = '../API/API_DelAppt.php';
-            openedform = "Deleteform";
+            formview("Deleteform");
         } else if (get == "AddNewMember"){
             sendto = '../API/Members/API_AddNewMember.php';
-            openedform = "Newmember";
+            formview("Newmember");
+        } else if (get == "hiddenform"){
+            sendto = '../API/Members/API_GetAppointments.php';
         }
         //sending data to api
         const form = document.getElementById(get);
@@ -74,7 +82,6 @@ session_start();
                 console.error();
             })
         })
-        formview(openedform);
     }
     function getdetails(sel){
         var text = sel.options[sel.selectedIndex].text;
@@ -190,6 +197,7 @@ session_start();
                     <th>Note</th>
                 </tr>
                 <tr>
+
                      <?php
                      $results = $_SESSION["Appts"];
                      $x = 0;

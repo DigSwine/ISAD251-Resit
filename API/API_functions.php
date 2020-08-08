@@ -73,11 +73,6 @@ function getFamilyMembers($fam){
     $statement->execute();
     return $statement->fetchAll(PDO::FETCH_ASSOC);
 }
-function getTheNote($ApptID){
-    $statement = getConnection()->prepare("SELECT 	Appointment_Note FROM tbl_appointments WHERE Appointment_ID = '" . $ApptID . "'");
-    $statement->execute();
-    return tosend($statement->fetchAll(PDO::FETCH_ASSOC));
-}
 
 //deletes
 function delAppt($fam, $who, $loc, $time, $date){

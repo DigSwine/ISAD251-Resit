@@ -2,7 +2,6 @@
 include_once 'Extras/Stylesheet.php';
 include_once 'Extras/Webfunctions.php';
 include_once '../API/API_Login.php';
-session_start();
 ?>
 
 <html>
