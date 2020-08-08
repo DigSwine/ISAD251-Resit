@@ -1,10 +1,7 @@
 <?php
 include_once 'Extras/Webfunctions.php';
 include_once 'Extras/Stylesheet.php';
-include_once '../API/Appointments/API_GetAppointments.php';
-include_once  '../API/API_SendAppt.php';
-include_once  '../API/API_EditAppt.php';
-include_once  '../API/API_DelAppt.php';
+include_once  '../API/API_GetAppointments.php';
 ?>
 <script type="text/javascript">
     function onload() {
@@ -48,19 +45,17 @@ include_once  '../API/API_DelAppt.php';
     function saveappt(get) {
         var sendto = "";
         if (get == "addnewappoinment") {
-            sendto = '../API/API_SendAppt.php';
+            sendto = '../API/Appointments/API_SendAppt.php';
             formview("Addform");
         } else if (get == "editappoinment") {
-            sendto = '../API/API_EditAppt.php';
+            sendto = '../API/Appointments/API_EditAppt.php';
             formview("Editform");
         } else if (get == "deleteappoinment") {
-            sendto = '../API/API_DelAppt.php';
+            sendto = '../API/Appointments/API_DelAppt.php';
             formview("Deleteform");
         } else if (get == "AddNewMember"){
             sendto = '../API/Members/API_AddNewMember.php';
             formview("Newmember");
-        } else if (get == "hiddenform"){
-            sendto = '../API/Members/API_GetAppointments.php';
         }
         //sending data to api
         const form = document.getElementById(get);
@@ -240,7 +235,7 @@ include_once  '../API/API_DelAppt.php';
             <select onchange="saveoption(this)" id="whoholder">
                 <option value="select">-- Please Select Family Member --</option>
                 <?php
-                $results = $_SESSION["Testing"];
+                $results = $_SESSION["Fammembers"];
                 if ($results != null) {
                     foreach ($results as $row) {
                         foreach ($row as $cell) {
@@ -331,14 +326,14 @@ include_once  '../API/API_DelAppt.php';
                         foreach ($row as $cell) {
                             if ($x == 0) {
                                 //apptid
-                            } else if ($x == 1){
+                            } else if ($x == 1) {
                                 //memid
                                 $stringed = getApptName($cell);
                                 $stringed .= ", ";
-                            } else if($x == 2){
+                            } else if ($x == 2) {
                                 //famid
-                            }  else if($x == 6){
-                                //notes
+                            } else if ($x == 6) {
+                                $stringed .= $cell;
                             } else {
                                 $cell .= ", ";
                                 $stringed .= $cell;

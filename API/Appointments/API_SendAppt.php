@@ -1,5 +1,5 @@
 <?php
-include_once 'API_functions.php';
+include_once '../API_functions.php';
 //check if $_POST contains whos
 if (isset($_POST["whos"])) {
     //get information
