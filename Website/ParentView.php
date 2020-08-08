@@ -1,12 +1,12 @@
 <?php
 include_once 'Extras/Webfunctions.php';
 include_once 'Extras/Stylesheet.php';
-include_once  '../API/API_GetAppointments.php';
+include_once  '../API/GetAppointments.php';
 ?>
 <script type="text/javascript">
     function onload() {
         //send data
-        fetch('../API/API_GetAppointments.php', {
+        fetch('../API/GetAppointments.php', {
             method: 'post'
         }).then(function (response) {
             return response.text();
@@ -45,16 +45,16 @@ include_once  '../API/API_GetAppointments.php';
     function saveappt(get) {
         var sendto = "";
         if (get == "addnewappoinment") {
-            sendto = '../API/Appointments/API_SendAppt.php';
+            sendto = '../API/Appointments/SendAppt.php';
             formview("Addform");
         } else if (get == "editappoinment") {
-            sendto = '../API/Appointments/API_EditAppt.php';
+            sendto = '../API/Appointments/EditAppt.php';
             formview("Editform");
         } else if (get == "deleteappoinment") {
-            sendto = '../API/Appointments/API_DelAppt.php';
+            sendto = '../API/Appointments/DelAppt.php';
             formview("Deleteform");
         } else if (get == "AddNewMember"){
-            sendto = '../API/Members/API_AddNewMember.php';
+            sendto = '../API/Members/AddNewMember.php';
             formview("Newmember");
         }
         //sending data to api
@@ -340,6 +340,7 @@ include_once  '../API/API_GetAppointments.php';
                             }
                             $x = $x + 1;
                         }
+
                         echo "<option value='" . $stringed . "'>", $stringed, "</option>";
                     }
                 }

@@ -1,7 +1,7 @@
 <?php
 include_once 'Extras/Stylesheet.php';
 include_once 'Extras/Webfunctions.php';
-include_once '../API/API_Login.php';
+include_once '../API/Login.php';
 ?>
 
 <html>
@@ -26,7 +26,6 @@ include_once '../API/API_Login.php';
 </div>
 </body>
 </html>
-
 <script>
     function compare(get) {
         //sending data to api
@@ -38,7 +37,7 @@ include_once '../API/API_Login.php';
             //get form data
             const formData = new FormData(this);
             //send data
-            fetch('../API/API_Login.php', {
+            fetch('../API/Login.php', {
                 method: 'post',
                 body: formData
             }).then(function (response) {
@@ -50,7 +49,8 @@ include_once '../API/API_Login.php';
                 } else if (text == "C"){
                     openChild();
                 } else {
-                 alert("Username or Password is incorrect: Please try again.")
+                 alert("Username or Password is incorrect: Please try again.");
+                 alert(text);
                 }
 
             }).catch(function (error) {
