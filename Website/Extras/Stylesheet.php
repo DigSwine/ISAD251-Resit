@@ -21,7 +21,6 @@
         width: 100%;
     }
 
-
     table, th, td {
         padding-left: 10px;
         border: 1px solid black;

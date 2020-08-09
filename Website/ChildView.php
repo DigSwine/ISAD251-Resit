@@ -15,7 +15,6 @@ include_once  '../API/GetDeadlines.php';
         }).catch(function (error) {
             console.error();
         })
-
         formview("Addform");
         formview("Editform");
         formview("Deleteform");
@@ -42,16 +41,15 @@ include_once  '../API/GetDeadlines.php';
         if (get == "adddeadline") {
             sendto = '../API/Deadlines/AddDead.php';
             formview("Addform");
-        } else if (get == "editappoinment") {
+        } else if (get == "editdeadl") {
             sendto = '../API/Deadlines/EditDead.php';
             formview("Editform");
-        } else if (get == "deleteappoinment") {
+        } else if (get == "deldead") {
             sendto = '../API/Deadlines/DelDead.php';
             formview("Deleteform");
         }
         //sending data to api
         const form = document.getElementById(get);
-
         form.addEventListener('submit', function (e) {
             //stop reloading
             e.preventDefault();
@@ -78,21 +76,20 @@ include_once  '../API/GetDeadlines.php';
         var date = str[2];
         var note = str[3];
 
-        alert(what);
         document.getElementById('oldwhatfor').value = what;
         document.getElementById('oldforwhen').value = time;
-        document.getElementById('oldfordate').value = date;
-        document.getElementById('olddednote').value = note;
+        document.getElementById('olddate').value = date;
+        document.getElementById('dednote').value = note;
 
         document.getElementById('whatfor').value = what;
         document.getElementById('forwhen').value = time;
         document.getElementById('fordate').value = date;
         document.getElementById('dednote').value = note;
 
-        document.getElementById('delwho').value = what;
-        document.getElementById('dellocation').value = time;
-        document.getElementById('deltime').value = date;
-        document.getElementById('deldate').value = note;
+        document.getElementById('delwhat').value = what;
+        document.getElementById('deltime').value = time;
+        document.getElementById('deldate').value = date;
+        document.getElementById('delnote').value = note;
     }
     function clearallforms(form) {
         if(form.id == "Addform"){
@@ -116,22 +113,22 @@ include_once  '../API/GetDeadlines.php';
 
         //edit page
         document.getElementById('whatselecter').options.selectedIndex = 0;
-        document.getElementById('oldforwho').value = "";
-        document.getElementById('oldloc').value = "";
-        document.getElementById('oldtime').value = "";
+        document.getElementById('oldwhatfor').value = "";
+        document.getElementById('oldforwhen').value = "";
         document.getElementById('olddate').value = "";
-        document.getElementById('forwho').value = "";
-        document.getElementById('loc').value = "";
-        document.getElementById('editedtime').value = "";
-        document.getElementById('editeddate').value = "";
-        document.getElementById('apptnote').value = "";
+        document.getElementById('dednote').value = "";
+
+        document.getElementById('whatfor').value = "";
+        document.getElementById('forwhen').value = "";
+        document.getElementById('fordate').value = "";
+        document.getElementById('dednote').value = "";
 
         //delete page
         document.getElementById('delholder').options.selectedIndex = 0;
-        document.getElementById('delwho').value = "";
-        document.getElementById('dellocation').value = "";
+        document.getElementById('delwhat').value = "";
         document.getElementById('deltime').value = "";
         document.getElementById('deldate').value = "";
+        document.getElementById('delnote').value = "";
     }
 </script>
 <html>
@@ -224,6 +221,8 @@ include_once  '../API/GetDeadlines.php';
                 ?>
             </select>
             <label for="family" hidden></label>
+            <label for "member" hidden></label>
+            <input type="text" id="member" name="member" value="<?php echo $_SESSION["member"] ?>" hidden>
             <input type="text" id="family" name="family" value="<?php echo $_SESSION["family"] ?>" hidden><br>
             <label for="whatfor">What For: </label>
             <input type="text" id="whatfor" name="whatfor" > <br><br>
@@ -233,54 +232,48 @@ include_once  '../API/GetDeadlines.php';
             <input type="text" name="oldforwhen" id="oldforwhen" hidden>
             <label for="fordate">Date: </label>
             <input type="text" name="fordate" id="fordate"><br><br>
-            <input type="text" name="olddednote" id="olddednote" hidden>
+            <input type="text" name="olddate" id="olddate" hidden>
             <label for="dednote">Note: </label>
             <input type="text" name="dednote" id="dednote"><br><br>
-            <input type="submit" value="Submit" onclick="saveappt('editdeadl')">
+            <input type="submit" value="Submit" onclick="savedline('editdeadl')">
         </form>
     </div>
 </div>
 <div id="Deleteform" class="views"; style="padding-top: 20px; max-width: 50%;">
     <div class="container" style="padding-left: 10px; max-width: 100%">
-        <form id="deleteappoinment">
+        <form id="deldead">
             <select onchange="getdetails(this)" id="delholder">
                 <option value="select">-- Please Select Family Member --</option>
                 <?php
-                $results = $_SESSION["Deadlines"];
+                $results = $_SESSION["deadlines"];
                 if ($results != null) {
+                    $x = 0;
                     foreach ($results as $row) {
                         $stringed = "";
-                        $x = 0;
                         foreach ($row as $cell) {
-                            if ($x == 0) {
-                                //apptid
-                            } else if ($x == 1) {
-                                //memid
-                                $stringed = getApptName($cell);
-                                $stringed .= ", ";
-                            } else if ($x == 2) {
-                                //famid
-                            } else if ($x == 6) {
+                            if ($x == 3) {
                                 $stringed .= $cell;
                             } else {
                                 $cell .= ", ";
                                 $stringed .= $cell;
+                                $x = $x + 1;
                             }
-                            $x = $x + 1;
                         }
-
+                        $x = 0;
                         echo "<option value='" . $stringed . "'>", $stringed, "</option>";
                     }
                 }
                 ?>
             </select>
             <label for="family" hidden></label>
+            <label for "member" hidden></label>
+            <input type="text" id="member" name="member" value="<?php echo $_SESSION["member"] ?>" hidden>
             <input type="text" id="family" name="family" value="<?php echo $_SESSION["family"] ?>" hidden>
-            <input type="text" id="delwho" name="delwho" hidden>
-            <input type="text" name="dellocation" id="dellocation" hidden>
+            <input type="text" id="delwhat" name="delwhat" hidden>
             <input type="text" name="deltime" id="deltime" hidden>
-            <input type="text" name="deldate" id="deldate" hidden><br><br><br>
-            <input type="submit" value="Submit" onclick="saveappt('deleteappoinment')">
+            <input type="text" name="deldate" id="deldate" hidden>
+            <input type="text" name="delnote" id="delnote" hidden><br><br><br>
+            <input type="submit" value="Submit" onclick="savedline('deldead')">
         </form>
     </div>
 </div>

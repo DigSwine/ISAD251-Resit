@@ -9,6 +9,15 @@ Server Link: \\CENT-5-534.uopnet.plymouth.ac.uk\ISAD251\MWilson-Slider
 
 Youtube Link:
 
+Users and passwords already on the database with example data:
+|Username	|Password	|
+|---------------|---------------|
+|Test		|Test
+|Test1		| - Test1
+|Test2		| - Test2
+|Testing	| - Testing
+|Testing1	| - Testing1
+
 
 Additional Resources (Images, Libaries ect)
 - Referance List:

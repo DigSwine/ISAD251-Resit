@@ -1,10 +1,10 @@
 <?php
-
 const SeverHTML = 'proj-mysql.uopnet.plymouth.ac.uk';
 const User = 'ISAD251_MWilsonSlider';
 const Pass = 'ISAD251_22201420';
 const DataBase = 'ISAD251_MWilsonSlider';
 
+//dont touch
 function getConnection()
 {
     $dataSourceName = 'mysql:dbname='.DataBase.';host='.SeverHTML;
@@ -20,7 +20,7 @@ function getConnection()
     return $dbConnection;
 }
 
-//Getters
+//getters
 function getAll($User, $Pass){
     $_SESSION["role"] = getRole($User, $Pass);
     $_SESSION["name"] = getName($User, $Pass);
@@ -73,11 +73,16 @@ function getFamilyMembers($fam){
     $statement->execute();
     return $statement->fetchAll(PDO::FETCH_ASSOC);
 }
-
 function getAllDeadlines($mem){
     $statement = getConnection()->prepare("SELECT Deadline_Name, Deadline_DueTime, Deadline_DueDate, Deadline_Note FROM `tbl_deadlines` WHERE `Member_ID` = '" . $mem . "'");
     $statement->execute();
     return $statement->fetchAll(PDO::FETCH_ASSOC);
+}
+function getUsercompare($user){
+    $statement = getConnection()->prepare("SELECT Member_Username FROM tbl_members WHERE Member_Username = '" . $user . "'");
+    $statement->execute();
+    $resultSet = $statement->fetchAll(PDO::FETCH_ASSOC);
+    return tosend($resultSet);
 }
 //deletes
 function delAppt($fam, $who, $loc, $time, $date){
@@ -85,7 +90,10 @@ function delAppt($fam, $who, $loc, $time, $date){
     $statement = getConnection()->prepare("DELETE FROM tbl_appointments WHERE Family_ID = '".$fam."' AND Member_ID = '".$whoid."' AND Appointment_Location = '".$loc."' AND Appointment_Time = '".$time."' AND Appointment_Date = '".$date."'");
     $statement->execute();
 }
-
+function delDead($fam, $mem, $oldfor, $oldtime, $olddate){
+    $statement = getConnection()->prepare("DELETE FROM tbl_deadlines WHERE Family_ID = '".$fam."' AND Member_ID = '".$mem."' AND Deadline_Name = '".$oldfor."'  AND Deadline_DueTime = '".$oldtime."' AND Deadline_DueDate = '".$olddate."'");
+    $statement->execute();
+}
 //senders
 function setNewAppt($fam, $who, $loc, $time, $date){
     $whoid = getMemberID($who, $fam);
@@ -101,8 +109,8 @@ function createmember($fam, $who, $pc, $user, $pass){
     $statement = getConnection()->prepare("INSERT INTO `tbl_members` (`Member_ID`, `Family_ID`, `Member_Name`, `Member_Role`, `Member_Username`, `Member_Password`) VALUES (NULL, '" . $fam . "', '" . $who . "', '" . $pc . "', '" . $user . "', '" . $pass . "')");
     $statement->execute();
 }
-function setNewDed($fam, $mem, $name, $time, $date){
-    $statement = getConnection()->prepare("INSERT INTO `tbl_deadlines` (`Deadline_ID`, `Member_ID`, `Family_ID`, `Deadline_Name`, `Deadline_DueTime`, `Deadline_DueDate`, `Deadline_Note`) VALUES (NULL, '" . $mem . "', '" . $fam . "', '" . $name . "', '" . $time . "', '" . $date . "', 'No note has been made')");
+function setNewDed($fam, $mem, $name, $time, $date, $note){
+    $statement = getConnection()->prepare("INSERT INTO `tbl_deadlines` (`Deadline_ID`, `Member_ID`, `Family_ID`, `Deadline_Name`, `Deadline_DueTime`, `Deadline_DueDate`, `Deadline_Note`) VALUES (NULL, '" . $mem . "', '" . $fam . "', '" . $name . "', '" . $time . "', '" . $date . "', '" . $note . "')");
     $statement->execute();
 }
 
