@@ -7,5 +7,5 @@ if (isset($_POST["AddDedname"])) {
     $time = $_POST["addtime"];
     $date = $_POST["adddate"];
     $member = $_POST["member"];
-    setNewDed($fam, $member, $name, $time, $date, "No note has been made");
+    setNewDed($fam, $member, $name, $time, $date, "No note has been made", "No");
 }

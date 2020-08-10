@@ -18,7 +18,8 @@ if (isset($_POST['name'])) {
             echo "exists";
         } else{
             //submit new user
-            createmember($fam, $who, "Parent", $user, $pass);
+            $famid = 1;
+            createfam($famid, $name, "Parent", $user, $pass);
             echo "done";
         }
 

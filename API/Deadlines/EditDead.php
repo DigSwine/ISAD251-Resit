@@ -8,6 +8,7 @@ if (isset($_POST["family"])) {
     $time = $_POST["forwhen"];
     $date = $_POST["fordate"];
     $note = $_POST["dednote"];
+    $comp = $_POST["comp"];
 
     $oldfor = $_POST["oldwhatfor"];
     $oldtime = $_POST["oldforwhen"];
@@ -17,5 +18,5 @@ if (isset($_POST["family"])) {
     delDead($fam, $mem, $oldfor, $oldtime, $olddate);
 
     //add new deadline
-    setNewDed($fam, $mem, $for, $time, $date, $note);
+    setNewDed($fam, $mem, $for, $time, $date, $note, $comp);
 }

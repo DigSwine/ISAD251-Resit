@@ -16,10 +16,12 @@ include_once  '../API/GetAppointments.php';
             console.error();
         })
 
-        formview("Addform");
-        formview("Editform");
-        formview("Deleteform");
-        formview("Newmember");
+        for (var y = 0; y < 3; y++)
+        {
+            formview("Addform");
+        }
+        //formview("btn_Edit");
+        //formview("btn_Delete");
     }
     function Logout(){
         <?php
@@ -32,10 +34,11 @@ include_once  '../API/GetAppointments.php';
         if (x.style.display === "none") {
            //show
             x.style.display = "block";
-            clearallforms(x);
+            hideforms(x);
         } else {
             //hide
             x.style.display = "none";
+            clearallforms(x);
         }
     }
     function saveoption(sel) {
@@ -78,53 +81,43 @@ include_once  '../API/GetAppointments.php';
             })
         })
     }
-    function getdetails(sel){
-        var text = sel.options[sel.selectedIndex].text;
-        var str = text.split(", ");
-        var who = str[0];
-        var loc = str[1];
-        var time = str[2];
-        var date = str[3];
-        var note = str[4];
+    function getdetails(sel) {
+        var text = sel.name;
+        var str = text.split("^/");
 
-        document.getElementById('oldforwho').value = who;
-        document.getElementById('oldloc').value = loc;
-        document.getElementById('oldtime').value = time;
-        document.getElementById('olddate').value = date;
+        var numofappts = str[0];
+        var who = str[1];
+        var loc = str[2];
+        var time = str[3];
+        var date = str[4];
+        var note = str[5];
+        var ticked = str[6];
 
-        document.getElementById('forwho').value = who;
-        document.getElementById('loc').value = loc;
-        document.getElementById('editedtime').value = time;
-        document.getElementById('editeddate').value = date;
-        document.getElementById('apptnote').value = note;
 
-        document.getElementById('delwho').value = who;
-        document.getElementById('dellocation').value = loc;
-        document.getElementById('deltime').value = time;
-        document.getElementById('deldate').value = date;
+        console.log(numofappts);
+        if (ticked == "un") {
+            sel.name = who+"^/"+loc+"^/"+time+"^/"+date+"^/"+note+"^/ti";
+            document.getElementById('oldforwho').value = who;
+            document.getElementById('oldloc').value = loc;
+            document.getElementById('oldtime').value = time;
+            document.getElementById('olddate').value = date;
+
+            document.getElementById('forwho').value = who;
+            document.getElementById('loc').value = loc;
+            document.getElementById('editedtime').value = time;
+            document.getElementById('editeddate').value = date;
+            document.getElementById('apptnote').value = note;
+
+            document.getElementById('delwho').value = who;
+            document.getElementById('dellocation').value = loc;
+            document.getElementById('deltime').value = time;
+            document.getElementById('deldate').value = date;
+        } else {
+            clearallforms();
+            sel.name = who+"^/"+loc+"^/"+time+"^/"+date+"^/"+note+"^/un";
+        }
     }
-    function clearallforms(form) {
-        if(form.id == "Addform"){
-            document.getElementById("Editform").style.display = "none";
-            document.getElementById("Deleteform").style.display = "none";
-            document.getElementById("Newmember").style.display = "none";
-        }
-        if(form.id == "Editform"){
-            document.getElementById("Addform").style.display = "none";
-            document.getElementById("Deleteform").style.display = "none";
-            document.getElementById("Newmember").style.display = "none";
-        }
-        if(form.id == "Deleteform"){
-            document.getElementById("Editform").style.display = "none";
-            document.getElementById("Addform").style.display = "none";
-            document.getElementById("Newmember").style.display = "none";
-        }
-        if(form.id == "Newmember"){
-            document.getElementById("Editform").style.display = "none";
-            document.getElementById("Addform").style.display = "none";
-            document.getElementById("Deleteform").style.display = "none";
-        }
-
+    function clearallforms() {
 
         //add page
         document.getElementById('whoholder').options.selectedIndex = 0;
@@ -163,6 +156,28 @@ include_once  '../API/GetAppointments.php';
         //set the hidden textbox value
         document.getElementById('PorC').value = sel.options[sel.selectedIndex].text;
     }
+    function hideforms(form){
+        if(form.id == "Addform"){
+            document.getElementById("Editform").style.display = "none";
+            document.getElementById("Deleteform").style.display = "none";
+            document.getElementById("Newmember").style.display = "none";
+        }
+        if(form.id == "Editform"){
+            document.getElementById("Addform").style.display = "none";
+            document.getElementById("Deleteform").style.display = "none";
+            document.getElementById("Newmember").style.display = "none";
+        }
+        if(form.id == "Deleteform"){
+            document.getElementById("Editform").style.display = "none";
+            document.getElementById("Addform").style.display = "none";
+            document.getElementById("Newmember").style.display = "none";
+        }
+        if(form.id == "Newmember"){
+            document.getElementById("Editform").style.display = "none";
+            document.getElementById("Addform").style.display = "none";
+            document.getElementById("Deleteform").style.display = "none";
+        }
+    }
 </script>
 <html>
 <!-- Header -->
@@ -196,30 +211,39 @@ include_once  '../API/GetAppointments.php';
                      <?php
                      $results = $_SESSION["Appts"];
                      $x = 0;
+                     $checkname = "";
+                     $numberofappts = 0;
                      if ($results != null) {
                          foreach ($results as $row) {
                              foreach ($row as $cell) {
+
+
                                  if ($x == 0) {
                                  } else if ($x == 2) {
                                  } else if ($cell == null) {
                                  } else {
                                      if ($x == 1) {
                                          $cell = getApptName($cell);
-                                     } else if($x == 6){
-                                         //notes
-                                         if ($cell != null){
-
-                                         } else {
-                                             $cell = "No note avaliable";
+                                         $checkname .= $cell;
+                                         $checkname .= "^/";
+                                         echo "<td>", $cell, "</td>";
+                                     } else {
+                                         $checkname .= $cell;
+                                         $checkname .= "^/";
+                                         echo "<td>", $cell, "</td>";
+                                         if($x == 6){
+                                             $checkname .= "un";
+                                             echo "<td>","<input type='checkbox' id='" . $checkname . "' name='" . $checkname . "' onchange='getdetails(this)'>","</td>";
                                          }
                                      }
-                                     echo "<td>", $cell, "</td>";
                                  }
                                  $x = $x + 1;
                              }
                              #add new line and reset x
                              echo "<tr>", "</tr>";
                              $x = 0;
+                             $checkname = "";
+                             $numberofappts = $numberofappts + 1;
                          }
                      }
                      ?>
@@ -261,38 +285,6 @@ include_once  '../API/GetAppointments.php';
 <div id="Editform" class="views"; style="padding-top: 20px; max-width: 50%;">
     <div class="container" style="padding-left: 10px; max-width: 100%;">
         <form id="editappoinment">
-            <select onchange="getdetails(this)" id="whatselecter">
-                <option value="select">-- Please Select Appointment to Edit--</option>
-                <?php
-                $results = $_SESSION["Appts"];
-                if ($results != null) {
-                    foreach ($results as $row) {
-                        $stringed = "";
-                        $x = 0;
-                        foreach ($row as $cell) {
-                            if ($x == 0) {
-                                //apptid
-
-                            } else if ($x == 1){
-                                //memid
-                                $stringed = getApptName($cell);
-                                $stringed .= ", ";
-                            } else if($x == 2){
-                                //famid
-                            } else if($x == 6){
-                                $stringed .= $cell;
-                            } else {
-                                $cell .= ", ";
-                                $stringed .= $cell;
-                            }
-                            $x = $x + 1;
-                        }
-                        echo "<option value='" . $stringed . "'>", $stringed, "</option>";
-                    }
-                }
-                ?>
-            </select>
-            <label for="family" hidden></label>
             <input type="text" id="family" name="family" value="<?php echo $_SESSION["family"] ?>" hidden><br>
             <label for="forwho">Who For: </label>
             <input type="text" id="forwho" name="forwho" > <br><br>
@@ -315,44 +307,13 @@ include_once  '../API/GetAppointments.php';
 <div id="Deleteform" class="views"; style="padding-top: 20px; max-width: 50%;">
     <div class="container" style="padding-left: 10px; max-width: 100%">
         <form id="deleteappoinment">
-            <select onchange="getdetails(this)" id="delholder">
-                <option value="select">-- Please Select Family Member --</option>
-                <?php
-                $results = $_SESSION["Appts"];
-                if ($results != null) {
-                    foreach ($results as $row) {
-                        $stringed = "";
-                        $x = 0;
-                        foreach ($row as $cell) {
-                            if ($x == 0) {
-                                //apptid
-                            } else if ($x == 1) {
-                                //memid
-                                $stringed = getApptName($cell);
-                                $stringed .= ", ";
-                            } else if ($x == 2) {
-                                //famid
-                            } else if ($x == 6) {
-                                $stringed .= $cell;
-                            } else {
-                                $cell .= ", ";
-                                $stringed .= $cell;
-                            }
-                            $x = $x + 1;
-                        }
-
-                        echo "<option value='" . $stringed . "'>", $stringed, "</option>";
-                    }
-                }
-                ?>
-            </select>
             <label for="family" hidden></label>
             <input type="text" id="family" name="family" value="<?php echo $_SESSION["family"] ?>" hidden>
             <input type="text" id="delwho" name="delwho" hidden>
             <input type="text" name="dellocation" id="dellocation" hidden>
             <input type="text" name="deltime" id="deltime" hidden>
             <input type="text" name="deldate" id="deldate" hidden><br><br><br>
-            <input type="submit" value="Submit" onclick="saveappt('deleteappoinment')">
+            <input type="submit" value="Confirm you wish to delete the last selected appointment" onclick="saveappt('deleteappoinment')">
         </form>
     </div>
 </div>

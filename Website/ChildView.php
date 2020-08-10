@@ -75,16 +75,19 @@ include_once  '../API/GetDeadlines.php';
         var time = str[1];
         var date = str[2];
         var note = str[3];
+        var comp = str[4];
 
         document.getElementById('oldwhatfor').value = what;
         document.getElementById('oldforwhen').value = time;
         document.getElementById('olddate').value = date;
         document.getElementById('dednote').value = note;
+        document.getElementById('oldcomp').value = comp;
 
         document.getElementById('whatfor').value = what;
         document.getElementById('forwhen').value = time;
         document.getElementById('fordate').value = date;
         document.getElementById('dednote').value = note;
+        document.getElementById('comp').value = comp;
 
         document.getElementById('delwhat').value = what;
         document.getElementById('deltime').value = time;
@@ -117,11 +120,13 @@ include_once  '../API/GetDeadlines.php';
         document.getElementById('oldforwhen').value = "";
         document.getElementById('olddate').value = "";
         document.getElementById('dednote').value = "";
+        document.getElementById('oldcomp').value = ""
 
         document.getElementById('whatfor').value = "";
         document.getElementById('forwhen').value = "";
         document.getElementById('fordate').value = "";
         document.getElementById('dednote').value = "";
+        document.getElementById('comp').value = "";
 
         //delete page
         document.getElementById('delholder').options.selectedIndex = 0;
@@ -155,6 +160,7 @@ include_once  '../API/GetDeadlines.php';
                     <th>Time</th>
                     <th>Date</th>
                     <th>Note</th>
+                    <th>Completed</th>
                 </tr>
                 <tr>
                     <?php
@@ -206,7 +212,7 @@ include_once  '../API/GetDeadlines.php';
                     foreach ($results as $row) {
                         $stringed = "";
                         foreach ($row as $cell) {
-                            if ($x == 3) {
+                            if ($x == 4) {
                                 $stringed .= $cell;
                             } else {
                                 $cell .= ", ";
@@ -235,6 +241,9 @@ include_once  '../API/GetDeadlines.php';
             <input type="text" name="olddate" id="olddate" hidden>
             <label for="dednote">Note: </label>
             <input type="text" name="dednote" id="dednote"><br><br>
+            <input type="text" name="oldcomp" id="oldcomp" hidden>
+            <label for="comp">Completed:</label>
+            <input type="text" name="comp" id="comp"><br><br>
             <input type="submit" value="Submit" onclick="savedline('editdeadl')">
         </form>
     </div>

@@ -27,7 +27,8 @@ include_once 'Extras/Webfunctions.php';
                     alert("Username exists, please try again");
                 }
                 if(text == "done"){
-                    //Loginpage();
+                    alert("Account has been created please login");
+                    Loginpage();
                 }
                 console.log(text);
             }).catch(function (error) {
