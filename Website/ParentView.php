@@ -47,18 +47,19 @@ include_once  '../API/GetAppointments.php';
     }
     function saveappt(get) {
         var sendto = "";
+        var formopen = "";
         if (get == "addnewappoinment") {
             sendto = '../API/Appointments/SendAppt.php';
-            formview("Addform");
+            formopen = "Addform";
         } else if (get == "editappoinment") {
             sendto = '../API/Appointments/EditAppt.php';
-            formview("Editform");
+            formopen = "Editform";
         } else if (get == "deleteappoinment") {
             sendto = '../API/Appointments/DelAppt.php';
-            formview("Deleteform");
+            formopen = "Deleteform";
         } else if (get == "AddNewMember"){
             sendto = '../API/Members/AddNewMember.php';
-            formview("Newmember");
+            formopen = "Newmember";
         }
         //sending data to api
         const form = document.getElementById(get);
@@ -76,25 +77,57 @@ include_once  '../API/GetAppointments.php';
                 return response.text();
             }).then(function (text) {
                 console.log(text);
+                if(text == "pass"){
+                    alert("Password did not match, please try again");
+                } else if (text == "user") {
+                        alert("Username is already in use, please try again");
+                    } else if(text == "nu") {
+                        alert("Please fill in all missing text box(s)");
+                    } else {
+                    formview(formopen);
+                }
             }).catch(function (error) {
                 console.error();
             })
         })
+
     }
     function getdetails(sel) {
         var text = sel.name;
         var str = text.split("^/");
+        var who = str[0];
+        var loc = str[1];
+        var time = str[2];
+        var date = str[3];
+        var note = str[4];
+        var ticked = str[5];
+        var numofappts = 1;
+        <?php
+        foreach($_SESSION["Appts"] as $appt){
+            echo "if(numofappts == sel.id){";
+            //the box that has been ticked - avoid unticking it
+            echo "";
+            echo "} else {";
+            #untick other boxs
+            echo "document.getElementById(numofappts).checked = false;";
+            #change name of the one unticked
+            echo "var toswap = document.getElementById(numofappts).name;";
+            echo "var changing = toswap.split('^/');";
+            echo "var cw = changing[0];";
+            echo "var cl = changing[1];";
+            echo "var ct = changing[2];";
+            echo "var cd = changing[3];";
+            echo "var cn = changing[4];";
+            echo "var untic = changing[5];";
+            echo "if(untic == 'ti'){";
+            echo "document.getElementById(numofappts).name = cw+'^/'+cl+'^/'+ct+'^/'+cd+'^/'+cn+'^/un';";
+            echo "}";
+            echo "}";
+            echo "numofappts = numofappts + 1;";
+        }
+        ?>
 
-        var numofappts = str[0];
-        var who = str[1];
-        var loc = str[2];
-        var time = str[3];
-        var date = str[4];
-        var note = str[5];
-        var ticked = str[6];
 
-
-        console.log(numofappts);
         if (ticked == "un") {
             sel.name = who+"^/"+loc+"^/"+time+"^/"+date+"^/"+note+"^/ti";
             document.getElementById('oldforwho').value = who;
@@ -118,7 +151,6 @@ include_once  '../API/GetAppointments.php';
         }
     }
     function clearallforms() {
-
         //add page
         document.getElementById('whoholder').options.selectedIndex = 0;
         document.getElementById('whos').value = "";
@@ -127,7 +159,6 @@ include_once  '../API/GetAppointments.php';
         document.getElementById('date').value = "";
 
         //edit page
-        document.getElementById('whatselecter').options.selectedIndex = 0;
         document.getElementById('oldforwho').value = "";
         document.getElementById('oldloc').value = "";
         document.getElementById('oldtime').value = "";
@@ -139,7 +170,6 @@ include_once  '../API/GetAppointments.php';
         document.getElementById('apptnote').value = "";
 
         //delete page
-        document.getElementById('delholder').options.selectedIndex = 0;
         document.getElementById('delwho').value = "";
         document.getElementById('dellocation').value = "";
         document.getElementById('deltime').value = "";
@@ -207,17 +237,15 @@ include_once  '../API/GetAppointments.php';
                     <th>Note</th>
                 </tr>
                 <tr>
-
                      <?php
                      $results = $_SESSION["Appts"];
                      $x = 0;
                      $checkname = "";
                      $numberofappts = 0;
+                     $y = 1;
                      if ($results != null) {
                          foreach ($results as $row) {
                              foreach ($row as $cell) {
-
-
                                  if ($x == 0) {
                                  } else if ($x == 2) {
                                  } else if ($cell == null) {
@@ -231,9 +259,9 @@ include_once  '../API/GetAppointments.php';
                                          $checkname .= $cell;
                                          $checkname .= "^/";
                                          echo "<td>", $cell, "</td>";
-                                         if($x == 6){
+                                         if ($x == 6) {
                                              $checkname .= "un";
-                                             echo "<td>","<input type='checkbox' id='" . $checkname . "' name='" . $checkname . "' onchange='getdetails(this)'>","</td>";
+                                             echo "<td>", "<input type='checkbox' id='" . $y . "' name='" . $checkname . "' onchange='getdetails(this)'>", "</td>";
                                          }
                                      }
                                  }
@@ -241,6 +269,7 @@ include_once  '../API/GetAppointments.php';
                              }
                              #add new line and reset x
                              echo "<tr>", "</tr>";
+                             $y = $y + 1;
                              $x = 0;
                              $checkname = "";
                              $numberofappts = $numberofappts + 1;
@@ -270,7 +299,7 @@ include_once  '../API/GetAppointments.php';
                 ?>
             </select>
             <label for="family" hidden></label>
-            <input type="text" id="family" name="family" value="<?php echo $_SESSION["family"] ?>" hidden>
+            <input type="text" id="addfamily" name="family" value="<?php echo $_SESSION["family"] ?>" hidden>
             <input type="text" id="whos" name="whos" hidden> <br><br>
             <label for="location">Where: </label>
             <input type="text" name="location" id="location"><br><br>
@@ -285,7 +314,7 @@ include_once  '../API/GetAppointments.php';
 <div id="Editform" class="views"; style="padding-top: 20px; max-width: 50%;">
     <div class="container" style="padding-left: 10px; max-width: 100%;">
         <form id="editappoinment">
-            <input type="text" id="family" name="family" value="<?php echo $_SESSION["family"] ?>" hidden><br>
+            <input type="text" id="editfamily" name="family" value="<?php echo $_SESSION["family"] ?>" hidden><br>
             <label for="forwho">Who For: </label>
             <input type="text" id="forwho" name="forwho" > <br><br>
             <input type="text" id="oldforwho" name="oldforwho" hidden>
@@ -308,12 +337,12 @@ include_once  '../API/GetAppointments.php';
     <div class="container" style="padding-left: 10px; max-width: 100%">
         <form id="deleteappoinment">
             <label for="family" hidden></label>
-            <input type="text" id="family" name="family" value="<?php echo $_SESSION["family"] ?>" hidden>
+            <input type="text" id="delfamily" name="family" value="<?php echo $_SESSION["family"] ?>" hidden>
             <input type="text" id="delwho" name="delwho" hidden>
             <input type="text" name="dellocation" id="dellocation" hidden>
             <input type="text" name="deltime" id="deltime" hidden>
             <input type="text" name="deldate" id="deldate" hidden><br><br><br>
-            <input type="submit" value="Confirm you wish to delete the last selected appointment" onclick="saveappt('deleteappoinment')">
+            <input type="submit" value="Confirm you wish to delete the selected appointment" onclick="saveappt('deleteappoinment')">
         </form>
     </div>
 </div>
@@ -321,7 +350,7 @@ include_once  '../API/GetAppointments.php';
 <div class="container" style="padding-left: 10px; max-width: 100%">
     <form id="AddNewMember">
         <label for="family" hidden></label>
-        <input type="text" id="family" name="family" value="<?php echo $_SESSION["family"] ?>" hidden>
+        <input type="text" id="thefamily" name="family" value="<?php echo $_SESSION["family"] ?>" hidden>
         <label for="whosnew">First Name: </label>
         <input type="text" id="whosnew" name="whosnew"><br><br>
         <label for="CorPHolder">Parent or Child: </label>
@@ -334,7 +363,9 @@ include_once  '../API/GetAppointments.php';
         <label for="NewUser">Username: </label>
         <input type="text" name="NewUser" id="NewUser"><br><br>
         <label for="NewPass">Password: </label>
-        <input type="text" name="NewPass" id="NewPass"><br><br><br>
+        <input type="password" name="NewPass" id="NewPass"><br><br>
+        <label for="ConPass">Confirm Password: </label>
+        <input type="password" name="ConPass" id="ConPass"><br><br><br>
         <input type="submit" value="Submit" onclick="saveappt('AddNewMember')">
     </form>
 </div>

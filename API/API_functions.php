@@ -100,9 +100,10 @@ function setNewAppt($fam, $who, $loc, $time, $date){
     $statement = getConnection()->prepare("INSERT INTO `appointments` (`Appointment_ID`, `Member_ID`, `Family_ID`, `Appointment_Location`, `Appointment_Time`, `Appointment_Date`, `Appointment_Note`) VALUES (NULL, '" . $whoid . "', '" . $fam . "', '" . $loc . "', '" . $time . "', '" . $date . "', 'No note has been made')");
     $statement->execute();
 }
-function setEditedAppt($fam, $who, $loc, $time, $date, $note){
+function setEditedAppt($fam, $who, $loc, $time, $date, $note, $oldwho, $oldloc, $oldtime, $olddate){
     $whoid = getMemberID($who, $fam);
-    $statement = getConnection()->prepare("INSERT INTO `appointments` (`Appointment_ID`, `Member_ID`, `Family_ID`, `Appointment_Location`, `Appointment_Time`, `Appointment_Date`, `Appointment_Note`) VALUES (NULL, '" . $whoid . "', '" . $fam . "', '" . $loc . "', '" . $time . "', '" . $date . "', '" . $note . "')");
+    $oldwhoid = getMemberID($oldwho, $fam);
+    $statement = getConnection()->prepare("UPDATE appointments SET Member_ID = '" . $whoid . "',Appointment_Location = '" . $loc ."', Appointment_Time = '" . $time ."', Appointment_Date = '" . $date . "', Appointment_Note = '" . $note . "' WHERE Family_ID = '" . $fam . "' AND Member_ID = '" . $oldwhoid . "' AND Appointment_Location = '" . $oldloc ."' AND Appointment_Time = '" . $oldtime ."' AND Appointment_Date = '" . $olddate . "'");
     $statement->execute();
 }
 function createmember($fam, $who, $pc, $user, $pass){
@@ -130,7 +131,6 @@ function createfam($famid, $name, $PorC, $user, $pass){
     $statement3 = getConnection()->prepare("UPDATE members SET Family_ID = '" . $famid . "' WHERE Member_Username = '" . $user . "'");
     $statement3->execute();
 }
-
 
 
 //useful functions

@@ -15,9 +15,6 @@ if (isset($_POST["forwho"])) {
     $date = $_POST["editeddate"];
     $note = $_POST["apptnote"];
 
-    //delete appt
-    delAppt($fam, $oldwho, $oldloc, $oldtime, $olddate);
-
-    //added edited appt
-    setEditedAppt($fam, $who, $loc, $time, $date, $note);
+    //update appt
+    setEditedAppt($fam, $who, $loc, $time, $date, $note, $oldwho, $oldloc, $oldtime, $olddate);
 }
