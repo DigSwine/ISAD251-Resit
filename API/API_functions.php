@@ -132,7 +132,6 @@ function createfam($famid, $name, $PorC, $user, $pass){
     $statement3->execute();
 }
 
-
 //useful functions
 function tosend($resultSet){
     if ($resultSet != null) {

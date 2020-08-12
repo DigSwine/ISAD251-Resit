@@ -15,9 +15,9 @@ include_once  '../API/GetDeadlines.php';
         }).catch(function (error) {
             console.error();
         })
-        formview("Addform");
-        formview("Editform");
-        formview("Deleteform");
+        for (var y = 0; y < 3; y++){
+            formview("Addform");
+        }
     }
     function Logout(){
         <?php
@@ -30,23 +30,34 @@ include_once  '../API/GetDeadlines.php';
         if (x.style.display === "none") {
             //show
             x.style.display = "block";
-            clearallforms(x);
+            if(name == "Addform"){
+                //avoid multiple forms being sent and to make the form look clean after selecting an appt
+                var edbt = document.getElementById('btn_Edit').disabled;
+                if(edbt == false){
+                    btnuse('btn_Edit');
+                    btnuse('btn_Delete');
+                }
+                clearallforms();
+            }
+            hideforms(x);
         } else {
             //hide
             x.style.display = "none";
+            clearallforms(x);
         }
     }
     function savedline(get) {
         var sendto = "";
+        var formopen = "";
         if (get == "adddeadline") {
             sendto = '../API/Deadlines/AddDead.php';
-            formview("Addform");
+            formopen = "Addform";
         } else if (get == "editdeadl") {
             sendto = '../API/Deadlines/EditDead.php';
-            formview("Editform");
+            formopen = "Editform";
         } else if (get == "deldead") {
             sendto = '../API/Deadlines/DelDead.php';
-            formview("Deleteform");
+            formopen = "Deleteform";
         }
         //sending data to api
         const form = document.getElementById(get);
@@ -63,51 +74,63 @@ include_once  '../API/GetDeadlines.php';
                 return response.text();
             }).then(function (text) {
                 console.log(text);
+                if(text == "nu") {
+                    alert("Please fill in all missing text box(s)");
+                } else {
+                    formview(formopen);
+                }
             }).catch(function (error) {
                 console.error();
             })
         })
     }
     function getdetails(sel) {
-        var text = sel.options[sel.selectedIndex].text;
-        var str = text.split(", ");
+        var text = sel.name;
+        var str = text.split("^/");
         var what = str[0];
         var time = str[1];
         var date = str[2];
         var note = str[3];
         var comp = str[4];
+        var ticked = str[5];
 
-        document.getElementById('oldwhatfor').value = what;
-        document.getElementById('oldforwhen').value = time;
-        document.getElementById('olddate').value = date;
-        document.getElementById('dednote').value = note;
-        document.getElementById('oldcomp').value = comp;
+        clearselectors(sel);
 
-        document.getElementById('whatfor').value = what;
-        document.getElementById('forwhen').value = time;
-        document.getElementById('fordate').value = date;
-        document.getElementById('dednote').value = note;
-        document.getElementById('comp').value = comp;
+        if (ticked == "un") {
+            sel.name = what + "^/" + time + "^/" + date + "^/" + note + "^/" + comp + "^/ti";
 
-        document.getElementById('delwhat').value = what;
-        document.getElementById('deltime').value = time;
-        document.getElementById('deldate').value = date;
-        document.getElementById('delnote').value = note;
+            btnuse('btn_Edit');
+            btnuse('btn_Delete');
+
+            document.getElementById('oldwhatfor').value = what;
+            document.getElementById('oldforwhen').value = time;
+            document.getElementById('olddate').value = date;
+            document.getElementById('dednote').value = note;
+            document.getElementById('oldcomp').value = comp;
+
+            document.getElementById('whatfor').value = what;
+            document.getElementById('forwhen').value = time;
+            document.getElementById('fordate').value = date;
+            document.getElementById('dednote').value = note;
+            document.getElementById('comp').value = comp;
+
+            document.getElementById('delwhat').value = what;
+            document.getElementById('deltime').value = time;
+            document.getElementById('deldate').value = date;
+            document.getElementById('delnote').value = note;
+        } else {
+            clearallforms();
+            for (var y = 0; y < 4; y++){
+                formview("Addform");
+            }
+            btnuse('btn_Edit');
+            btnuse('btn_Delete');
+            sel.name = what + "^/" + time + "^/" + date + "^/" + note + "^/" + comp + "^/un";
+        }
     }
-    function clearallforms(form) {
-        if(form.id == "Addform"){
-            document.getElementById("Editform").style.display = "none";
-            document.getElementById("Deleteform").style.display = "none";
-        }
-        if(form.id == "Editform"){
-            document.getElementById("Addform").style.display = "none";
-            document.getElementById("Deleteform").style.display = "none";
-        }
-        if(form.id == "Deleteform"){
-            document.getElementById("Editform").style.display = "none";
-            document.getElementById("Addform").style.display = "none";
-        }
-
+    function clearallforms() {
+        //selecters
+        clearselectors(0);
 
         //add page
         document.getElementById('AddDedname').value = "";
@@ -115,7 +138,6 @@ include_once  '../API/GetDeadlines.php';
         document.getElementById('adddate').value = "";
 
         //edit page
-        document.getElementById('whatselecter').options.selectedIndex = 0;
         document.getElementById('oldwhatfor').value = "";
         document.getElementById('oldforwhen').value = "";
         document.getElementById('olddate').value = "";
@@ -129,11 +151,57 @@ include_once  '../API/GetDeadlines.php';
         document.getElementById('comp').value = "";
 
         //delete page
-        document.getElementById('delholder').options.selectedIndex = 0;
         document.getElementById('delwhat').value = "";
         document.getElementById('deltime').value = "";
         document.getElementById('deldate').value = "";
         document.getElementById('delnote').value = "";
+    }
+    function clearselectors(sel){
+        var numofappts = 1;
+        <?php
+        foreach($_SESSION["deadlines"] as $dedl){
+            echo "if(numofappts != sel.id){";
+            #untick other boxs
+            echo "document.getElementById(numofappts).checked = false;";
+            #change name of the one unticked
+            echo "var toswap = document.getElementById(numofappts).name;";
+            echo "var changing = toswap.split('^/');";
+            echo "var cw = changing[0];";
+            echo "var cl = changing[1];";
+            echo "var ct = changing[2];";
+            echo "var cd = changing[3];";
+            echo "var cn = changing[4];";
+            echo "var untic = changing[5];";
+            echo "if(untic == 'ti'){";
+            echo "document.getElementById(numofappts).name = cw+'^/'+cl+'^/'+ct+'^/'+cd+'^/'+cn+'^/un';";
+            echo "}}";
+            echo "numofappts = numofappts + 1;";
+        }
+        ?>
+    }
+    function hideforms(form) {
+        if (form.id == "Addform") {
+            document.getElementById("Editform").style.display = "none";
+            document.getElementById("Deleteform").style.display = "none";
+        }
+        if (form.id == "Editform") {
+            document.getElementById("Addform").style.display = "none";
+            document.getElementById("Deleteform").style.display = "none";
+        }
+        if (form.id == "Deleteform") {
+            document.getElementById("Editform").style.display = "none";
+            document.getElementById("Addform").style.display = "none";
+        }
+    }
+    function btnuse(btn) {
+        var x = document.getElementById(btn);
+        if (x.disabled === true) {
+            //enable
+            x.disabled = false;
+        } else {
+            //disable
+            x.disabled = true;
+        }
     }
 </script>
 <html>
@@ -166,15 +234,27 @@ include_once  '../API/GetDeadlines.php';
                     <?php
                     $results = $_SESSION["deadlines"];
                     $x = 0;
+                    $checkname = "";
+                    $numberofappts = 0;
+                    $y = 1;
                     if ($results != null) {
                         foreach ($results as $row) {
                             foreach ($row as $cell) {
+                                $checkname .= $cell;
+                                $checkname .= "^/";
                                 echo "<td>", $cell, "</td>";
+                                if ($x == 4) {
+                                    $checkname .= "un";
+                                    echo "<td>", "<input type='checkbox' id='" . $y . "' name='" . $checkname . "' onchange='getdetails(this)'>", "</td>";
+                                }
+                                $x = $x + 1;
                             }
-                            $x = $x + 1;
                             #add new line and reset x
                             echo "<tr>", "</tr>";
+                            $y = $y + 1;
                             $x = 0;
+                            $checkname = "";
+                            $numberofappts = $numberofappts + 1;
                         }
                     }
                     ?>
@@ -188,9 +268,9 @@ include_once  '../API/GetDeadlines.php';
         <form id="adddeadline">
             <label for="AddDedname">What For: </label>
             <label for="member" hidden></label>
-            <input type="text" id="member" name="member" value="<?php echo $_SESSION["member"] ?>" hidden>
+            <input type="text" id="addmember" name="member" value="<?php echo $_SESSION["member"] ?>" hidden>
             <label for="family" hidden></label>
-            <input type="text" id="family" name="family" value="<?php echo $_SESSION["family"] ?>" hidden>
+            <input type="text" id="addfamily" name="family" value="<?php echo $_SESSION["family"] ?>" hidden>
             <input type="text" id="AddDedname" name="AddDedname"> <br><br>
             <label for="time">Time: </label>
             <input type="text" name="addtime" id="addtime"><br><br>
@@ -203,33 +283,8 @@ include_once  '../API/GetDeadlines.php';
 <div id="Editform" class="views"; style="padding-top: 20px; max-width: 50%;">
     <div class="container" style="padding-left: 10px; max-width: 100%;">
         <form id="editdeadl">
-            <select onchange="getdetails(this)" id="whatselecter">
-                <option value="select">-- Please Select Deadline to Edit--</option>
-                <?php
-                $results = $_SESSION["deadlines"];
-                if ($results != null) {
-                    $x = 0;
-                    foreach ($results as $row) {
-                        $stringed = "";
-                        foreach ($row as $cell) {
-                            if ($x == 4) {
-                                $stringed .= $cell;
-                            } else {
-                                $cell .= ", ";
-                                $stringed .= $cell;
-                                $x = $x + 1;
-                            }
-                        }
-                        $x = 0;
-                        echo "<option value='" . $stringed . "'>", $stringed, "</option>";
-                    }
-                }
-                ?>
-            </select>
-            <label for="family" hidden></label>
-            <label for "member" hidden></label>
-            <input type="text" id="member" name="member" value="<?php echo $_SESSION["member"] ?>" hidden>
-            <input type="text" id="family" name="family" value="<?php echo $_SESSION["family"] ?>" hidden><br>
+            <input type="text" id="edimember" name="member" value="<?php echo $_SESSION["member"] ?>" hidden>
+            <input type="text" id="edifamily" name="family" value="<?php echo $_SESSION["family"] ?>" hidden><br>
             <label for="whatfor">What For: </label>
             <input type="text" id="whatfor" name="whatfor" > <br><br>
             <input type="text" id="oldwhatfor" name="oldwhatfor" hidden>
@@ -251,38 +306,13 @@ include_once  '../API/GetDeadlines.php';
 <div id="Deleteform" class="views"; style="padding-top: 20px; max-width: 50%;">
     <div class="container" style="padding-left: 10px; max-width: 100%">
         <form id="deldead">
-            <select onchange="getdetails(this)" id="delholder">
-                <option value="select">-- Please Select Family Member --</option>
-                <?php
-                $results = $_SESSION["deadlines"];
-                if ($results != null) {
-                    $x = 0;
-                    foreach ($results as $row) {
-                        $stringed = "";
-                        foreach ($row as $cell) {
-                            if ($x == 3) {
-                                $stringed .= $cell;
-                            } else {
-                                $cell .= ", ";
-                                $stringed .= $cell;
-                                $x = $x + 1;
-                            }
-                        }
-                        $x = 0;
-                        echo "<option value='" . $stringed . "'>", $stringed, "</option>";
-                    }
-                }
-                ?>
-            </select>
-            <label for="family" hidden></label>
-            <label for "member" hidden></label>
-            <input type="text" id="member" name="member" value="<?php echo $_SESSION["member"] ?>" hidden>
-            <input type="text" id="family" name="family" value="<?php echo $_SESSION["family"] ?>" hidden>
+            <input type="text" id="delmember" name="member" value="<?php echo $_SESSION["member"] ?>" hidden>
+            <input type="text" id="delfamily" name="family" value="<?php echo $_SESSION["family"] ?>" hidden>
             <input type="text" id="delwhat" name="delwhat" hidden>
             <input type="text" name="deltime" id="deltime" hidden>
             <input type="text" name="deldate" id="deldate" hidden>
             <input type="text" name="delnote" id="delnote" hidden><br><br><br>
-            <input type="submit" value="Submit" onclick="savedline('deldead')">
+            <input type="submit" value="Are you sure you want to delete the selected deadline?" onclick="savedline('deldead')">
         </form>
     </div>
 </div>

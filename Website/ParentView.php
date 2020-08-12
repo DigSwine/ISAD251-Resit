@@ -15,13 +15,9 @@ include_once  '../API/GetAppointments.php';
         }).catch(function (error) {
             console.error();
         })
-
-        for (var y = 0; y < 3; y++)
-        {
+        for (var y = 0; y < 3; y++){
             formview("Addform");
         }
-        //formview("btn_Edit");
-        //formview("btn_Delete");
     }
     function Logout(){
         <?php
@@ -33,12 +29,31 @@ include_once  '../API/GetAppointments.php';
         var x = document.getElementById(name);
         if (x.style.display === "none") {
            //show
+            if(name == "Addform"){
+                //avoid multiple forms being sent and to make the form look clean after selecting an appt
+                var edbt = document.getElementById('btn_Edit').disabled;
+                if(edbt == false){
+                    btnuse('btn_Edit');
+                    btnuse('btn_Delete');
+                }
+                clearallforms();
+            }
             x.style.display = "block";
             hideforms(x);
         } else {
             //hide
             x.style.display = "none";
             clearallforms(x);
+        }
+    }
+    function btnuse(btn) {
+        var x = document.getElementById(btn);
+        if (x.disabled === true) {
+            //enable
+            x.disabled = false;
+        } else {
+            //disable
+            x.disabled = true;
         }
     }
     function saveoption(sel) {
@@ -101,35 +116,18 @@ include_once  '../API/GetAppointments.php';
         var date = str[3];
         var note = str[4];
         var ticked = str[5];
-        var numofappts = 1;
-        <?php
-        foreach($_SESSION["Appts"] as $appt){
-            echo "if(numofappts == sel.id){";
-            //the box that has been ticked - avoid unticking it
-            echo "";
-            echo "} else {";
-            #untick other boxs
-            echo "document.getElementById(numofappts).checked = false;";
-            #change name of the one unticked
-            echo "var toswap = document.getElementById(numofappts).name;";
-            echo "var changing = toswap.split('^/');";
-            echo "var cw = changing[0];";
-            echo "var cl = changing[1];";
-            echo "var ct = changing[2];";
-            echo "var cd = changing[3];";
-            echo "var cn = changing[4];";
-            echo "var untic = changing[5];";
-            echo "if(untic == 'ti'){";
-            echo "document.getElementById(numofappts).name = cw+'^/'+cl+'^/'+ct+'^/'+cd+'^/'+cn+'^/un';";
-            echo "}";
-            echo "}";
-            echo "numofappts = numofappts + 1;";
-        }
-        ?>
 
+        clearselectors(sel);
 
         if (ticked == "un") {
             sel.name = who+"^/"+loc+"^/"+time+"^/"+date+"^/"+note+"^/ti";
+
+            btnuse('btn_Edit');
+            btnuse('btn_Delete');
+
+            document.getElementById('btn_Edit').disable = false;
+            document.getElementById('btn_Delete').disable = false;
+
             document.getElementById('oldforwho').value = who;
             document.getElementById('oldloc').value = loc;
             document.getElementById('oldtime').value = time;
@@ -147,10 +145,15 @@ include_once  '../API/GetAppointments.php';
             document.getElementById('deldate').value = date;
         } else {
             clearallforms();
+            btnuse('btn_Edit');
+            btnuse('btn_Delete');
             sel.name = who+"^/"+loc+"^/"+time+"^/"+date+"^/"+note+"^/un";
         }
     }
     function clearallforms() {
+        //selectors
+        clearselectors(0);
+
         //add page
         document.getElementById('whoholder').options.selectedIndex = 0;
         document.getElementById('whos').value = "";
@@ -208,6 +211,34 @@ include_once  '../API/GetAppointments.php';
             document.getElementById("Deleteform").style.display = "none";
         }
     }
+    function clearselectors(sel){
+        var numofappts = 1;
+        <?php
+        foreach($_SESSION["Appts"] as $appt){
+            echo "if(numofappts == sel.id){";
+            //the box that has been ticked - avoid unticking it
+            echo "";
+            echo "} else {";
+            #untick other boxs
+            echo "document.getElementById(numofappts).checked = false;";
+            #change name of the one unticked
+            echo "var toswap = document.getElementById(numofappts).name;";
+            echo "var changing = toswap.split('^/');";
+            echo "var cw = changing[0];";
+            echo "var cl = changing[1];";
+            echo "var ct = changing[2];";
+            echo "var cd = changing[3];";
+            echo "var cn = changing[4];";
+            echo "var untic = changing[5];";
+            echo "if(untic == 'ti'){";
+            echo "document.getElementById(numofappts).name = cw+'^/'+cl+'^/'+ct+'^/'+cd+'^/'+cn+'^/un';";
+            echo "}";
+            echo "}";
+            echo "numofappts = numofappts + 1;";
+        }
+        ?>
+    }
+
 </script>
 <html>
 <!-- Header -->
@@ -221,8 +252,8 @@ include_once  '../API/GetAppointments.php';
 <div class="views"; style="padding-top: 20px; max-width: 50%;">
     <div class="w3-content" style="padding-left: 50px;">
         <button onclick="formview('Addform')" id="btn_Add">Add Appointment</button>
-        <button onclick="formview('Editform')" id="btn_Edit">Edit Appointment</button>
-        <button onclick="formview('Deleteform')" id="btn_Delete">Delete Appointment</button>
+        <button onclick="formview('Editform')" id="btn_Edit" disabled="false">Edit Appointment</button>
+        <button onclick="formview('Deleteform')" id="btn_Delete" disabled="false">Delete Appointment</button>
         <br><br>
     </div>
     <div class="w3-content" style="padding-left: 50px;" >
