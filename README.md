@@ -22,4 +22,11 @@ Users and passwords already on the database with example data:
 Additional Resources (Images, Libaries ect)
 - Referance List:
 
+--Bootstrap
+https://www.w3schools.com/bootstrap/bootstrap_get_started.asp
+
+--.views (the way to do it was found here)
+https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_templates_cafe
+
+
 

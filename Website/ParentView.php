@@ -33,7 +33,10 @@ include_once  '../API/GetAppointments.php';
         var sendto = "";
         var formopen = "";
         if (get == "addnewappoinment") {
-            sendto = '../API/Appointments/SendAppt.php';
+            //sendto = '../API/Appointments/SendAppt.php';
+            <?php
+            include_once('../API/Appointments/SendAppt.php');
+            ?>
             formopen = "Addform";
         } else if (get == "editappoinment") {
             sendto = '../API/Appointments/EditAppt.php';
@@ -260,7 +263,7 @@ include_once  '../API/GetAppointments.php';
 </div>
 <div id="Addform" class="views"; style="padding-top: 20px; max-width: 50%;">
     <div class="container" style="padding-left: 10px; max-width: 100%">
-        <form id="addnewappoinment">
+        <form id="addnewappoinment" action="..">
             <label for="whos">Who For: </label>
             <select onchange="saveoption(this)" id="whoholder">
                 <option value="select">-- Please Select Family Member --</option>

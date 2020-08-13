@@ -18,7 +18,7 @@ session_start();
                 <h5>About this web page and its service</h5>
                 <div>
                     <p>This website that has been created to ensure easy navigation for all users.<br>
-                        This has been achieved by making everything user-friendly, with some disability adaptations added.                        taken into consideration.<br><br>
+                        This has been achieved by making everything user-friendly, with some disability adaptations added.<br><br>
                         The website aims to aid a family in management of their appointments, and the children's deadlines.<br>
                         Using individual logins will ensure that users can be separately identified as a parent or child.
                     </p>
