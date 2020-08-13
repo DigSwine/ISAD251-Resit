@@ -25,37 +25,6 @@ include_once  '../API/GetAppointments.php';
         ?>
         Backtohome();
     }
-    function formview(name){
-        var x = document.getElementById(name);
-        if (x.style.display === "none") {
-           //show
-            if(name == "Addform"){
-                //avoid multiple forms being sent and to make the form look clean after selecting an appt
-                var edbt = document.getElementById('btn_Edit').disabled;
-                if(edbt == false){
-                    btnuse('btn_Edit');
-                    btnuse('btn_Delete');
-                }
-                clearallforms();
-            }
-            x.style.display = "block";
-            hideforms(x);
-        } else {
-            //hide
-            x.style.display = "none";
-            clearallforms(x);
-        }
-    }
-    function btnuse(btn) {
-        var x = document.getElementById(btn);
-        if (x.disabled === true) {
-            //enable
-            x.disabled = false;
-        } else {
-            //disable
-            x.disabled = true;
-        }
-    }
     function saveoption(sel) {
         //set the hidden textbox value
         document.getElementById('whos').value = sel.options[sel.selectedIndex].text;
@@ -189,28 +158,6 @@ include_once  '../API/GetAppointments.php';
         //set the hidden textbox value
         document.getElementById('PorC').value = sel.options[sel.selectedIndex].text;
     }
-    function hideforms(form){
-        if(form.id == "Addform"){
-            document.getElementById("Editform").style.display = "none";
-            document.getElementById("Deleteform").style.display = "none";
-            document.getElementById("Newmember").style.display = "none";
-        }
-        if(form.id == "Editform"){
-            document.getElementById("Addform").style.display = "none";
-            document.getElementById("Deleteform").style.display = "none";
-            document.getElementById("Newmember").style.display = "none";
-        }
-        if(form.id == "Deleteform"){
-            document.getElementById("Editform").style.display = "none";
-            document.getElementById("Addform").style.display = "none";
-            document.getElementById("Newmember").style.display = "none";
-        }
-        if(form.id == "Newmember"){
-            document.getElementById("Editform").style.display = "none";
-            document.getElementById("Addform").style.display = "none";
-            document.getElementById("Deleteform").style.display = "none";
-        }
-    }
     function clearselectors(sel){
         var numofappts = 1;
         <?php
@@ -238,7 +185,6 @@ include_once  '../API/GetAppointments.php';
         }
         ?>
     }
-
 </script>
 <html>
 <!-- Header -->

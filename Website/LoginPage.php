@@ -3,7 +3,6 @@ include_once 'Extras/Stylesheet.php';
 include_once 'Extras/Webfunctions.php';
 include_once '../API/Login.php';
 ?>
-
 <html>
 <!-- Header with image -->
 <div class="header">
