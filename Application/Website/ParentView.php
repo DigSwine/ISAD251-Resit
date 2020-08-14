@@ -33,10 +33,7 @@ include_once  '../API/GetAppointments.php';
         var sendto = "";
         var formopen = "";
         if (get == "addnewappoinment") {
-            //sendto = '../API/Appointments/SendAppt.php';
-            <?php
-            include_once('../API/Appointments/SendAppt.php');
-            ?>
+            sendto = '../API/Appointments/SendAppt.php';
             formopen = "Addform";
         } else if (get == "editappoinment") {
             sendto = '../API/Appointments/EditAppt.php';
@@ -232,17 +229,13 @@ include_once  '../API/GetAppointments.php';
                                  } else {
                                      if ($x == 1) {
                                          $cell = getApptName($cell);
-                                         $checkname .= $cell;
-                                         $checkname .= "^/";
-                                         echo "<td>", $cell, "</td>";
-                                     } else {
-                                         $checkname .= $cell;
-                                         $checkname .= "^/";
-                                         echo "<td>", $cell, "</td>";
-                                         if ($x == 6) {
-                                             $checkname .= "un";
-                                             echo "<td>", "<input type='checkbox' id='" . $y . "' name='" . $checkname . "' onchange='getdetails(this)'>", "</td>";
-                                         }
+                                     }
+                                     $checkname .= $cell;
+                                     $checkname .= "^/";
+                                     echo "<td>", $cell, "</td>";
+                                     if ($x == 6) {
+                                         $checkname .= "un";
+                                         echo "<td>", "<input type='checkbox' id='" . $y . "' name='" . $checkname . "' onchange='getdetails(this)'>", "</td>";
                                      }
                                  }
                                  $x = $x + 1;
@@ -254,7 +247,7 @@ include_once  '../API/GetAppointments.php';
                              $checkname = "";
                              $numberofappts = $numberofappts + 1;
                          }
-                     }
+                         }
                      ?>
                 </tr>
             </table>
