@@ -51,7 +51,7 @@ function getMember($User, $Pass){
     return tosend($resultSet);
 }
 function getFamily($Mem){
-    $statement = getConnection()->prepare("SELECT Family_ID FROM familys WHERE Member_ID = '" . $Mem . "'");
+    $statement = getConnection()->prepare("SELECT Family_ID FROM members WHERE Member_ID = '" . $Mem . "'");
     $statement->execute();
     $resultSet = $statement->fetchAll(PDO::FETCH_ASSOC);
     return tosend($resultSet);

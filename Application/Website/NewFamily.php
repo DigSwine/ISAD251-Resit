@@ -26,6 +26,9 @@ include_once 'Extras/Webfunctions.php';
                 if(text == "exists") {
                     alert("Username exists, please try again");
                 }
+                if(text == "nu"){
+                    alert("Please fill in all text boxs, please try again")
+                }
                 if(text == "done"){
                     alert("Account has been created please login");
                     Loginpage();

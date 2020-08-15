@@ -12,8 +12,8 @@ if (isset($_POST["user"])) {
     getAll($_SESSION['user'], $_SESSION['pass']);
 
     if($role == "Parent"){
-        echo "P";
+       echo "P";
     } elseif ($role == "Child") {
-        echo "C";
+       echo "C";
     }
 }

@@ -5,7 +5,7 @@ session_start();
 if (isset($_SESSION['user'])) {
     $_SESSION["Fammembers"] = getFamilyMembers($_SESSION["family"]);
     $Appts = getAllAppointments($_SESSION["family"], $_SESSION["member"]);
-
+    getAll($_SESSION['user'], $_SESSION['pass']);
     $_SESSION["Appts"] = $Appts;
 }
 

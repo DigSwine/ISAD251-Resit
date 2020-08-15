@@ -272,7 +272,7 @@ include_once  '../API/GetDeadlines.php';
     </div>
 </div>
 
-//needed to solve an issue with how the forms are hidden
+<!-- needed to solve an issue with how the forms are hidden -->
 <div id="Newmember" class="views"; style="padding-top: 20px; max-width: 50%;">
 
 </div>
