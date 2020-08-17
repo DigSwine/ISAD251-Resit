@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: proj-mysql.uopnet.plymouth.ac.uk
--- Generation Time: Aug 14, 2020 at 07:48 PM
+-- Generation Time: Aug 17, 2020 at 11:28 AM
 -- Server version: 8.0.16
 -- PHP Version: 7.2.19
 
@@ -45,8 +45,9 @@ CREATE TABLE `appointments` (
 INSERT INTO `appointments` (`Appointment_ID`, `Member_ID`, `Family_ID`, `Appointment_Location`, `Appointment_Time`, `Appointment_Date`, `Appointment_Note`) VALUES
 (28, 1, 1, 'Dentist', '12:00', '09/08/2020', 'No note has been made'),
 (30, 6, 1, 'Doctors', '14:30', '09/08/2020', 'No note has been made'),
-(34, 26, 19, 'Doctors', '15:00', '09/08/2020', 'this is the finaltest'),
-(57, 3, 1, 'Doctors', '12:00', '04/08/2020', 'No note has been made');
+(57, 3, 1, 'Doctors', '12:00', '04/08/2020', 'No note has been made'),
+(58, 45, 34, 'Dentist', '12:00', '09/08/2020', 'No note has been made'),
+(61, 3, 1, 'Doctors', '12:00', '17/09/2020', 'No note has been made');
 
 -- --------------------------------------------------------
 
@@ -73,7 +74,8 @@ INSERT INTO `deadlines` (`Deadline_ID`, `Member_ID`, `Family_ID`, `Deadline_Name
 (1, 3, 1, 'History', '12:00', '20/09/2020', 'No note has been made', 'No'),
 (6, 6, 1, 'Art', '13:00', '20/09/2020', 'No note has been made', 'No'),
 (7, 3, 1, 'Art', '13:00', '20/09/2020', 'No note has been made', 'Yes'),
-(8, 3, 1, 'ICT', '10:00', '20/09/2020', 'No note has been made', 'No');
+(8, 3, 1, 'ICT', '10:00', '20/09/2020', 'No note has been made', 'No'),
+(9, 3, 1, 'Testing', '13:00', '31/09/2020', 'No note has been made', 'No');
 
 -- --------------------------------------------------------
 
@@ -93,10 +95,7 @@ CREATE TABLE `familys` (
 INSERT INTO `familys` (`Family_ID`, `Member_ID`) VALUES
 (1, 1),
 (2, 2),
-(1, 3),
-(2, 4),
-(1, 6),
-(19, 26);
+(34, 45);
 
 -- --------------------------------------------------------
 
@@ -123,7 +122,8 @@ INSERT INTO `members` (`Member_ID`, `Family_ID`, `Member_Name`, `Member_Role`, `
 (3, 1, 'Katrise', 'Child', 'Test1', 'Test1'),
 (4, 2, 'Bob', 'Child', 'Testing1', 'Testing1'),
 (6, 1, 'Sophie', 'Child', 'Test2', 'Test2'),
-(26, 19, 'finaltest', 'Parent', 'finaltest', 'finaltest');
+(45, 34, 'Lasttest', 'Parent', 'finaltesting', 'finaltesting'),
+(46, 34, 'Testingjr', 'Child', 'testingjr', 'testingjr');
 
 --
 -- Indexes for dumped tables
@@ -134,29 +134,28 @@ INSERT INTO `members` (`Member_ID`, `Family_ID`, `Member_Name`, `Member_Role`, `
 --
 ALTER TABLE `appointments`
   ADD PRIMARY KEY (`Appointment_ID`),
-  ADD KEY `FK_MemberID` (`Member_ID`),
-  ADD KEY `FK_FamilyID` (`Family_ID`);
+  ADD KEY `FK_MembID` (`Member_ID`),
+  ADD KEY `FK_FamiID` (`Family_ID`);
 
 --
 -- Indexes for table `deadlines`
 --
 ALTER TABLE `deadlines`
   ADD PRIMARY KEY (`Deadline_ID`),
-  ADD KEY `FK_MemId` (`Member_ID`),
-  ADD KEY `FK_FamId` (`Family_ID`);
+  ADD KEY `FK_MembeID` (`Member_ID`),
+  ADD KEY `FK_FamilID` (`Family_ID`);
 
 --
 -- Indexes for table `familys`
 --
 ALTER TABLE `familys`
-  ADD PRIMARY KEY (`Family_ID`,`Member_ID`) USING BTREE,
-  ADD KEY `Member_ID` (`Member_ID`);
+  ADD PRIMARY KEY (`Family_ID`,`Member_ID`) USING BTREE;
 
 --
 -- Indexes for table `members`
 --
 ALTER TABLE `members`
-  ADD PRIMARY KEY (`Member_ID`,`Family_ID`) USING BTREE,
+  ADD PRIMARY KEY (`Member_ID`) USING BTREE,
   ADD KEY `Family_ID` (`Family_ID`);
 
 --
@@ -167,25 +166,25 @@ ALTER TABLE `members`
 -- AUTO_INCREMENT for table `appointments`
 --
 ALTER TABLE `appointments`
-  MODIFY `Appointment_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `Appointment_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `deadlines`
 --
 ALTER TABLE `deadlines`
-  MODIFY `Deadline_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `Deadline_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `familys`
 --
 ALTER TABLE `familys`
-  MODIFY `Family_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `Family_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `members`
 --
 ALTER TABLE `members`
-  MODIFY `Member_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `Member_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- Constraints for dumped tables
@@ -195,21 +194,19 @@ ALTER TABLE `members`
 -- Constraints for table `appointments`
 --
 ALTER TABLE `appointments`
-  ADD CONSTRAINT `FK_FamilyID` FOREIGN KEY (`Family_ID`) REFERENCES `familys` (`Family_ID`),
-  ADD CONSTRAINT `FK_MemberID` FOREIGN KEY (`Member_ID`) REFERENCES `members` (`Member_ID`);
+  ADD CONSTRAINT `FK_MembID` FOREIGN KEY (`Member_ID`) REFERENCES `members` (`Member_ID`);
 
 --
 -- Constraints for table `deadlines`
 --
 ALTER TABLE `deadlines`
-  ADD CONSTRAINT `FK_FamId` FOREIGN KEY (`Family_ID`) REFERENCES `familys` (`Family_ID`),
-  ADD CONSTRAINT `FK_MemId` FOREIGN KEY (`Member_ID`) REFERENCES `members` (`Member_ID`);
+  ADD CONSTRAINT `FK_MembeID` FOREIGN KEY (`Member_ID`) REFERENCES `members` (`Member_ID`);
 
 --
--- Constraints for table `familys`
+-- Constraints for table `members`
 --
-ALTER TABLE `familys`
-  ADD CONSTRAINT `familys_ibfk_1` FOREIGN KEY (`Member_ID`) REFERENCES `members` (`Member_ID`);
+ALTER TABLE `members`
+  ADD CONSTRAINT `members_ibfk_1` FOREIGN KEY (`Family_ID`) REFERENCES `familys` (`Family_ID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
