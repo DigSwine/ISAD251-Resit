@@ -35,11 +35,11 @@ session_start();
                         <div class="row" >
                             <div class="views" >
                                 <h6>Parent View</h6>
-                                <p> Parent Banner </p>
+                                <img src="Extras/images/Parentviewimg.png" alt="Parent View Image" style="max-width: 90%;">
                             </div>
                             <div class="views" >
                                 <h6>Child View</h6>
-                                <p> Child Banner </p>
+                                <img src="Extras/images/Childviewimg.png" alt="Parent View Image" style="max-width: 90%;">
                             </div>
                         </div>
                         <br>
