@@ -49,9 +49,9 @@ include_once 'Extras/Webfunctions.php';
 </div>
 <body>
     <!-- Add a background color to the form -->
-    <div id="about"; style="padding-top: 20px; max-width: 100%;">
+    <div id="about" style="padding-top: 20px; max-width: 100%;">
         <!-- About Container -->
-        <div id="Addform" class="views"; style="padding-top: 10px; max-width: 100%;">
+        <div id="Addform" class="views" style="padding-top: 10px; max-width: 100%;">
             <h5>This form is for one person, once signed up you can add more members to your family when you have logged in.</h5><br>
             <div class="container" style="padding-left: 10px; max-width: 100%">
                 <form id="signupform">

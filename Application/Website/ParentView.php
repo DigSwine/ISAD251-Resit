@@ -3,7 +3,7 @@ include_once 'Extras/Webfunctions.php';
 include_once 'Extras/Stylesheet.php';
 include_once  '../API/GetAppointments.php';
 ?>
-<script type="text/javascript">
+<script>
     function onload() {
         //send data
         fetch('../API/GetAppointments.php', {
@@ -195,7 +195,7 @@ include_once  '../API/GetAppointments.php';
 </div>
 <body onload="onload()">
 <!-- Appt section -->
-<div class="views"; style="padding-top: 20px; max-width: 50%;">
+<div class="views" style="padding-top: 20px; max-width: 50%;">
     <div class="w3-content" style="padding-left: 50px;">
         <button onclick="formview('Addform')" id="btn_Add">Add Appointment</button>
         <button onclick="formview('Editform')" id="btn_Edit" disabled="false">Edit Appointment</button>
@@ -254,7 +254,7 @@ include_once  '../API/GetAppointments.php';
         </div>
     </div>
 </div>
-<div id="Addform" class="views"; style="padding-top: 20px; max-width: 50%;">
+<div id="Addform" class="views" style="padding-top: 20px; max-width: 50%;">
     <div class="container" style="padding-left: 10px; max-width: 100%">
         <form id="addnewappoinment" action="..">
             <label for="whos">Who For: </label>
@@ -284,7 +284,7 @@ include_once  '../API/GetAppointments.php';
         </form>
     </div>
 </div>
-<div id="Editform" class="views"; style="padding-top: 20px; max-width: 50%;">
+<div id="Editform" class="views" style="padding-top: 20px; max-width: 50%;">
     <div class="container" style="padding-left: 10px; max-width: 100%;">
         <form id="editappoinment">
             <input type="text" id="editfamily" name="family" value="<?php echo $_SESSION["family"] ?>" hidden><br>
@@ -306,7 +306,7 @@ include_once  '../API/GetAppointments.php';
         </form>
     </div>
 </div>
-<div id="Deleteform" class="views"; style="padding-top: 20px; max-width: 50%;">
+<div id="Deleteform" class="views" style="padding-top: 20px; max-width: 50%;">
     <div class="container" style="padding-left: 10px; max-width: 100%">
         <form id="deleteappoinment">
             <label for="family" hidden></label>
@@ -319,7 +319,7 @@ include_once  '../API/GetAppointments.php';
         </form>
     </div>
 </div>
-<div id="Newmember" class="views"; style="padding-top: 20px; max-width: 50%;">
+<div id="Newmember" class="views" style="padding-top: 20px; max-width: 50%;">
 <div class="container" style="padding-left: 10px; max-width: 100%">
     <form id="AddNewMember">
         <label for="family" hidden></label>

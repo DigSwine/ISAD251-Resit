@@ -11,14 +11,14 @@ include_once '../API/Login.php';
 </div>
 <body>
 <!-- Add a background color to the form -->
-<div id="about"; style="padding-top: 20px; max-width: 100%;">
+<div id="about" style="padding-top: 20px; max-width: 100%">
     <!-- Login Container -->
     <div class="container" style="padding-left: 50px;" >
         <form id="loginform">
             <label for="user">Username: </label>
-            <input id="user" name="user"; placeholder="Username"; type="text"><br><br>
+            <input id="user" name="user" placeholder="Username" type="text"><br><br>
             <label for="pass">Password: </label>
-            <input id="pass" name="pass"; placeholder="Password"; type="password"><br><br><br>
+            <input id="pass" name="pass" placeholder="Password" type="password"><br><br><br>
             <input type="submit" value="Submit" onclick="compare('loginform')">
         </form>
     </div>

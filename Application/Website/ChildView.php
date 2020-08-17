@@ -3,7 +3,7 @@ include_once 'Extras/Webfunctions.php';
 include_once 'Extras/Stylesheet.php';
 include_once  '../API/GetDeadlines.php';
 ?>
-<script type="text/javascript">
+<script>
     function onload() {
         //send data
         fetch('../API/GetDeadlines.php', {
@@ -167,7 +167,7 @@ include_once  '../API/GetDeadlines.php';
 </div>
 <body onload="onload()">
 <!-- Appt section -->
-<div class="views"; style="padding-top: 20px; max-width: 50%;">
+<div class="views" style="padding-top: 20px; max-width: 50%;">
     <div class="w3-content" style="padding-left: 50px;">
         <button onclick="formview('Addform')" id="btn_Add">Add Deadline</button>
         <button onclick="formview('Editform')" id="btn_Edit">Edit Deadline</button>
@@ -218,7 +218,7 @@ include_once  '../API/GetDeadlines.php';
         </div>
     </div>
 </div>
-<div id="Addform" class="views"; style="padding-top: 20px; max-width: 50%;">
+<div id="Addform" class="views" style="padding-top: 20px; max-width: 50%;">
     <div class="container" style="padding-left: 10px; max-width: 100%">
         <form id="adddeadline">
             <label for="AddDedname">What For: </label>
@@ -235,7 +235,7 @@ include_once  '../API/GetDeadlines.php';
         </form>
     </div>
 </div>
-<div id="Editform" class="views"; style="padding-top: 20px; max-width: 50%;">
+<div id="Editform" class="views" style="padding-top: 20px; max-width: 50%;">
     <div class="container" style="padding-left: 10px; max-width: 100%;">
         <form id="editdeadl">
             <input type="text" id="edimember" name="member" value="<?php echo $_SESSION["member"] ?>" hidden>
@@ -258,7 +258,7 @@ include_once  '../API/GetDeadlines.php';
         </form>
     </div>
 </div>
-<div id="Deleteform" class="views"; style="padding-top: 20px; max-width: 50%;">
+<div id="Deleteform" class="views" style="padding-top: 20px; max-width: 50%;">
     <div class="container" style="padding-left: 10px; max-width: 100%">
         <form id="deldead">
             <input type="text" id="delmember" name="member" value="<?php echo $_SESSION["member"] ?>" hidden>
@@ -273,7 +273,7 @@ include_once  '../API/GetDeadlines.php';
 </div>
 
 <!-- needed to solve an issue with how the forms are hidden -->
-<div id="Newmember" class="views"; style="padding-top: 20px; max-width: 50%;">
+<div id="Newmember" class="views" style="padding-top: 20px; max-width: 50%;">
 
 </div>
 </body>
