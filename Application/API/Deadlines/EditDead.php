@@ -14,9 +14,18 @@ if (isset($_POST["family"])) {
     $oldtime = $_POST["oldforwhen"];
     $olddate = $_POST["olddate"];
 
-    //delete old dealdline
-    delDead($fam, $mem, $oldfor, $oldtime, $olddate);
+//update appt
+if($for == null){
 
-    //add new deadline
-    setNewDed($fam, $mem, $for, $time, $date, $note, $comp);
+} else if($time == null){
+    echo "nu";
+} else if($date == null){
+    echo "nu";
+} else if($note == null){
+    echo "nu";
+} else if($comp == null){
+    echo "nu";
+} else {
+    setEditedDed($fam, $mem, $for, $time, $date, $note, $comp, $oldfor, $oldtime, $olddate);
+}
 }

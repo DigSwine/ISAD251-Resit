@@ -84,6 +84,13 @@ function getUsercompare($user){
     $resultSet = $statement->fetchAll(PDO::FETCH_ASSOC);
     return tosend($resultSet);
 }
+function getnewfam($memid){
+    $statement = getConnection()->prepare("SELECT Family_ID FROM familys WHERE Member_ID = '" . $memid . "'");
+    $statement->execute();
+    $resultSet = $statement->fetchAll(PDO::FETCH_ASSOC);
+    return tosend($resultSet);
+}
+
 //deletes
 function delAppt($fam, $who, $loc, $time, $date){
     $whoid = getMemberID($who, $fam);
@@ -103,7 +110,7 @@ function setNewAppt($fam, $who, $loc, $time, $date){
 function setEditedAppt($fam, $who, $loc, $time, $date, $note, $oldwho, $oldloc, $oldtime, $olddate){
     $whoid = getMemberID($who, $fam);
     $oldwhoid = getMemberID($oldwho, $fam);
-    $statement = getConnection()->prepare("UPDATE appointments SET Member_ID = '" . $whoid . "',Appointment_Location = '" . $loc ."', Appointment_Time = '" . $time ."', Appointment_Date = '" . $date . "', Appointment_Note = '" . $note . "' WHERE Family_ID = '" . $fam . "' AND Member_ID = '" . $oldwhoid . "' AND Appointment_Location = '" . $oldloc ."' AND Appointment_Time = '" . $oldtime ."' AND Appointment_Date = '" . $olddate . "'");
+    $statement = getConnection()->prepare("UPDATE appointments SET Member_ID = '" . $whoid . "', Appointment_Location = '" . $loc ."', Appointment_Time = '" . $time ."', Appointment_Date = '" . $date . "', Appointment_Note = '" . $note . "' WHERE Family_ID = '" . $fam . "' AND Member_ID = '" . $oldwhoid . "' AND Appointment_Location = '" . $oldloc ."' AND Appointment_Time = '" . $oldtime ."' AND Appointment_Date = '" . $olddate . "'");
     $statement->execute();
 }
 function createmember($fam, $who, $pc, $user, $pass){
@@ -112,6 +119,10 @@ function createmember($fam, $who, $pc, $user, $pass){
 }
 function setNewDed($fam, $mem, $name, $time, $date, $note, $comp){
     $statement = getConnection()->prepare("INSERT INTO `deadlines` (`Deadline_ID`, `Member_ID`, `Family_ID`, `Deadline_Name`, `Deadline_DueTime`, `Deadline_DueDate`, `Deadline_Note`, Deadline_Completed) VALUES (NULL, '" . $mem . "', '" . $fam . "', '" . $name . "', '" . $time . "', '" . $date . "', '" . $note . "', '" . $comp . "')");
+    $statement->execute();
+}
+function setEditedDed($fam, $mem, $for, $time, $date, $note, $comp, $oldfor, $oldtime, $olddate){
+    $statement = getConnection()->prepare("UPDATE deadlines SET Member_ID = '" . $mem . "', Family_ID = '" . $fam . "', Deadline_Name = '" . $for . "', Deadline_DueTime = '" . $time . "', Deadline_DueDate = '" . $date . "', Deadline_Note = '" . $note . "', Deadline_Completed = '" . $comp . "' WHERE Member_ID = '" . $mem. "' AND Deadline_Name = '" . $oldfor . "' AND Deadline_DueTime = '" . $oldtime . "' AND Deadline_DueDate = '" . $olddate . "'");
     $statement->execute();
 }
 function createfam($famid, $name, $PorC, $user, $pass){
@@ -125,10 +136,10 @@ function createfam($famid, $name, $PorC, $user, $pass){
 
     //get member and family id's
     $memid = getMemberID($name, $famid);
-    $famid = getFamily($memid);
+    $famid = getnewfam($memid);
 
     //edit member to have the correct famid
-    $statement3 = getConnection()->prepare("UPDATE members SET Family_ID = '" . $famid . "' WHERE Member_Username = '" . $user . "'");
+    $statement3 = getConnection()->prepare("UPDATE members SET Family_ID = '" . $famid . "' WHERE Member_ID = '" . $memid . "'");
     $statement3->execute();
 }
 
