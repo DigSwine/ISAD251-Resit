@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: proj-mysql.uopnet.plymouth.ac.uk
--- Generation Time: Aug 17, 2020 at 11:28 AM
+-- Generation Time: Aug 20, 2020 at 03:47 PM
 -- Server version: 8.0.16
 -- PHP Version: 7.2.19
 
@@ -46,7 +46,6 @@ INSERT INTO `appointments` (`Appointment_ID`, `Member_ID`, `Family_ID`, `Appoint
 (28, 1, 1, 'Dentist', '12:00', '09/08/2020', 'No note has been made'),
 (30, 6, 1, 'Doctors', '14:30', '09/08/2020', 'No note has been made'),
 (57, 3, 1, 'Doctors', '12:00', '04/08/2020', 'No note has been made'),
-(58, 45, 34, 'Dentist', '12:00', '09/08/2020', 'No note has been made'),
 (61, 3, 1, 'Doctors', '12:00', '17/09/2020', 'No note has been made');
 
 -- --------------------------------------------------------
@@ -73,9 +72,8 @@ CREATE TABLE `deadlines` (
 INSERT INTO `deadlines` (`Deadline_ID`, `Member_ID`, `Family_ID`, `Deadline_Name`, `Deadline_DueTime`, `Deadline_DueDate`, `Deadline_Note`, `Deadline_Completed`) VALUES
 (1, 3, 1, 'History', '12:00', '20/09/2020', 'No note has been made', 'No'),
 (6, 6, 1, 'Art', '13:00', '20/09/2020', 'No note has been made', 'No'),
-(7, 3, 1, 'Art', '13:00', '20/09/2020', 'No note has been made', 'Yes'),
-(8, 3, 1, 'ICT', '10:00', '20/09/2020', 'No note has been made', 'No'),
-(9, 3, 1, 'Testing', '13:00', '31/09/2020', 'No note has been made', 'No');
+(8, 3, 1, 'ICT', '10:00', '20/09/2020', 'No note has been made', 'Yes'),
+(12, 3, 1, 'Art', '13:00', '20/09/2020', 'No note has been made', 'No');
 
 -- --------------------------------------------------------
 
@@ -94,8 +92,7 @@ CREATE TABLE `familys` (
 
 INSERT INTO `familys` (`Family_ID`, `Member_ID`) VALUES
 (1, 1),
-(2, 2),
-(34, 45);
+(2, 2);
 
 -- --------------------------------------------------------
 
@@ -121,9 +118,7 @@ INSERT INTO `members` (`Member_ID`, `Family_ID`, `Member_Name`, `Member_Role`, `
 (2, 2, 'Dylon', 'Parent', 'Testing', 'Testing'),
 (3, 1, 'Katrise', 'Child', 'Test1', 'Test1'),
 (4, 2, 'Bob', 'Child', 'Testing1', 'Testing1'),
-(6, 1, 'Sophie', 'Child', 'Test2', 'Test2'),
-(45, 34, 'Lasttest', 'Parent', 'finaltesting', 'finaltesting'),
-(46, 34, 'Testingjr', 'Child', 'testingjr', 'testingjr');
+(6, 1, 'Sophie', 'Child', 'Test2', 'Test2');
 
 --
 -- Indexes for dumped tables
@@ -166,25 +161,25 @@ ALTER TABLE `members`
 -- AUTO_INCREMENT for table `appointments`
 --
 ALTER TABLE `appointments`
-  MODIFY `Appointment_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `Appointment_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `deadlines`
 --
 ALTER TABLE `deadlines`
-  MODIFY `Deadline_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `Deadline_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `familys`
 --
 ALTER TABLE `familys`
-  MODIFY `Family_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `Family_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
 -- AUTO_INCREMENT for table `members`
 --
 ALTER TABLE `members`
-  MODIFY `Member_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `Member_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- Constraints for dumped tables
